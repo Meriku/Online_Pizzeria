@@ -50,3 +50,13 @@ body {
     color: black;
     opacity: 0.9;
 }
+
+.supportBack {
+    align-content: center;
+    align-items: center;
+    border: 5px black;
+    margin: auto;
+    background-color: white;
+    border-radius: 0.9rem;
+    width: 300px
+}
