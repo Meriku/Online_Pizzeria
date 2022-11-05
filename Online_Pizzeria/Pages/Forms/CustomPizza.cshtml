@@ -1,0 +1,58 @@
+﻿@page
+@model Online_Pizzeria.Pages.Forms.CustomPizzaModel
+@{
+}
+
+<div class="text-center container">
+    <h1>Create your own Pizza</h1>
+    <form method="post" class="mx-auto mt-5 mb-5 px-5 pt-5 rounded alert-light col-4">
+
+        <input id="name" type="text" placeholder="Enter Pizza Name" asp-for="Pizza.Name"/>
+        <br />
+        @{
+            var number = 0;
+            foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
+            {
+                <input id="@number" type="checkbox" placeholder="@IngredientName"/> @IngredientName
+                <br />
+                number++;
+            }
+            <input id="ingredientsList" hidden="true" type="text" asp-for="Pizza.Ingredients" />
+        }      
+        <button id="button" class="btn btn-primary mt-1" type="submit">Order</button>
+    </form>
+        <br />
+        <p id="allIngredients"></p>
+</div>
+
+<script>   
+    let allIngredientsEl = document.getElementById("allIngredients")
+    let ingredientsListEl = document.getElementById("ingredientsList")
+
+    window.onload = () => {
+        let id = 0
+        while (document.getElementById(id) !== null) 
+        {
+            document.getElementById(id).addEventListener("click", MergeIngredients)      
+            id++
+        }
+    }
+
+    function MergeIngredients() {
+        let ingredients = []
+        let id = 0;
+        while (document.getElementById(id) !== null) 
+        {
+            let element = document.getElementById(id) 
+            if (element.checked) 
+            {
+                ingredients.push(element.placeholder)
+            }
+            id++
+        }
+       
+        allIngredientsEl.textContent = ingredients.join(", ")
+        ingredientsListEl.value = ingredients       
+        
+    }
+</script>
