@@ -11,18 +11,17 @@ namespace Online_Pizzeria.Pages.Checkout
         public PizzasModel Order { get; set; }
 
         private readonly ApplicationDB _context;
+
         public CheckoutModel(ApplicationDB context)
         {
             _context = context;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            var OrderToDB = Order as PizzaDBModel;
-
-            _context.PizzaOrders.Add(OrderToDB);
+            await _context.PizzaOrders.AddAsync(Order as PizzaDBModel);
             _context.SaveChanges();
-
         }
+
     }
 }

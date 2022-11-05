@@ -58,25 +58,28 @@
     }
 
     function NextPizza() {  
-        let name = pizzaNames[currentPizza]
-        imageEl.innerHTML = `<img class="smallImage" src="images/Pizza/${name}.png" title="Bolognese"/>`
         if (currentPizza < pizzaNames.length - 1) {
             currentPizza++
         }
         else {
             currentPizza = 0
         }
+        ChangeHTML()
     }
 
     function PrevPizza() {   
-        let name = pizzaNames[currentPizza]
-        imageEl.innerHTML = `<img class="smallImage" src="images/Pizza/${name}.png" title="Carbonara"/>`
         if (currentPizza != 0) {
             currentPizza--
         }
         else {
             currentPizza = pizzaNames.length - 1
         }
+        ChangeHTML()
+    }
+
+    function ChangeHTML() {
+        let name = pizzaNames[currentPizza]
+        imageEl.innerHTML = `<img class="smallImage" src="images/Pizza/${name}.png" title="Carbonara"/>`
     }
 
 </script>
