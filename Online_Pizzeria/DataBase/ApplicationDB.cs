@@ -5,7 +5,9 @@ namespace Online_Pizzeria.DataBase
 {
     public class ApplicationDB : DbContext
     {
-        public DbSet<PizzaDBModel> PizzaOrders { get; set; }
+        public DbSet<OrderDBModel> PizzaOrders { get; set; }
+
+        public DbSet<PizzaDBModel> Pizzas { get; set; }
 
         public ApplicationDB(DbContextOptions<ApplicationDB> options) : base(options)
         {

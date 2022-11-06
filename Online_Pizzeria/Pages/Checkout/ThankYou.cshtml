@@ -1,5 +1,11 @@
 ﻿@page
-@model Online_Pizzeria.Pages.Checkout.ThankYouModel
+@model ThankYouModel
 @{
+    ViewData["Title"] = "ThankYou";
 }
-<h5 style="text-align:center">Thank you for your Order</h5>
+
+<div class="supportBack" >
+    <h1 class="center">@ViewData["Title"]</h1>
+    <p class="center">Thank you for order!</p>
+</div>
+

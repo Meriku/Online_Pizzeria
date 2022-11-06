@@ -7,22 +7,28 @@
 
 <div class="container"> 
     <div class="row">
-        <div class="col-12 mb-5 mt-5">
-            <div class="w-100 row"> 
-              
-                <div class="col-8 align-items-center" >
 
-                    <div class="col-4 align-items-center">
-                        <img src="~/images/Pizzas/Create.png" class="w-100" />     
-                        <div class="align-items-center">
-                            <h5 style="text-align:center">Create your own Pizza</h5>
-                            <a class="btn btn-light" style="align:center" asp-area="" asp-page="Forms/CustomPizza">Try Now</a>
-                        </div>
-         
-                    </div>
-                
-                </div>
+        <div class="col-4 align-items-center">
+            <div class="align-items-center supportBack">
+                <h5 class="center m-auto">Create your own Pizza</h5>
+                <img src="~/images/AllPizzas/Create.png" class="pizzaImg" />   
+                <a class="btn center centerButton m-auto" asp-page="Forms/CustomPizza">Try Now</a>
             </div>
         </div>
+
+        @{
+            foreach (var name in Model.PizzasNames)
+            {
+                var imgsrc = $"/images/AllPizzas/{@name}.png";
+
+                <div class="col-4 align-items-center">
+                    <div class="align-items-center supportBack">
+                        <h5 class="center m-auto">@name</h5>
+                        <img src=@imgsrc class="pizzaImg" />   
+                        <a class="btn center centerButton m-auto" asp-page="Checkout/Checkout">Try Now</a>
+                    </div>
+                </div>
+            }
+        }
     </div>
 </div>

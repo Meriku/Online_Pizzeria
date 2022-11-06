@@ -39,6 +39,11 @@ body {
     text-align: center;
 }
 
+.centerButton {
+    text-align: center;
+    display: block
+}
+
 .buttonsCarousel {
     color: black;
     font-size: 24px;
@@ -54,9 +59,18 @@ body {
 .supportBack {
     align-content: center;
     align-items: center;
-    border: 5px black;
     margin: auto;
     background-color: white;
     border-radius: 0.9rem;
     width: 300px
+}
+
+.pizzaImg {
+    width:300px;
+    padding: 20px;
+    opacity: 0.9
+}
+.pizzaImg:hover {
+    transform: scale(1.1);
+    opacity: 1
 }

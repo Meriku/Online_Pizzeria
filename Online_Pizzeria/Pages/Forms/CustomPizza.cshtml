@@ -5,19 +5,19 @@
 
 <div class="text-center container">
     <h1>Create your own Pizza</h1>
-    <form method="post" class="mx-auto mt-5 mb-5 px-5 pt-5 rounded alert-light col-4">
 
-        <input id="name" type="text" placeholder="Enter Pizza Name" asp-for="Pizza.Name"/>
+    <form method="post" class="mx-auto mt-5 mb-5 px-5 pt-5 rounded alert-light col-4">
+        <input id="name" type="text" placeholder="Enter Pizza Name" asp-for="UserOrder.UserPizza.Name"/>
         <br />
         @{
             var number = 0;
             foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
             {
-                <input id="@number" type="checkbox" placeholder="@IngredientName"/> @IngredientName
+                <input id="@number" type="checkbox" placeholder="@IngredientName" style="width:100px"/> @IngredientName
                 <br />
                 number++;
             }
-            <input id="ingredientsList" hidden="true" type="text" asp-for="Pizza.Ingredients" />
+            <input id="ingredientsList" hidden="true" type="text" asp-for="UserOrder.UserPizza.Ingredients" />
         }      
         <button id="button" class="btn btn-primary mt-1" type="submit">Order</button>
     </form>

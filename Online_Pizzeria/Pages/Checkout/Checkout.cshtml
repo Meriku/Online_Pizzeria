@@ -2,16 +2,21 @@
 @model Online_Pizzeria.Pages.Checkout.CheckoutModel
 
 @{
-var imagePath = "~/images/Pizzas/" + (@Model.Order.ImageTitle + ".png");
+    var imagePath = "~/images/Pizza/Create.png"; //+ (@Model.UserOrder.UserPizza.Name + ".png");
 }
 
-    <div class="align-self-center"> 
-        <h5 style="text-align:center">Please, check your Order</h5>
+    <div class="supportBack"> 
+        <h5 class="center">Please, check your Order</h5>
         <br />
-        <p style="text-align:center">Your Pizza Name: @Model.Order.Name</p>
-        <p style="text-align:center">Order Price: @Model.Order.Price</p>
-        <img src="@imagePath" class="finalImage align-content-center" asp-append-version="true">
+        <p class="center m-0">Your Pizza Name: @Model.UserOrder.Id</p>
+        <p class="center m-0">Order Price: @Model.UserOrder.Price</p>      
     </div>
+    <div  class="center">  
+        <img src="@imagePath" class="finalImage m-2" asp-append-version="true">
+        <br />
+        <a class="btn btn-primary mt-4 w-25" asp-area="" asp-page="/Checkout/ThankYou">Everything is correct</a> 
+    </div>
+
 
 
 

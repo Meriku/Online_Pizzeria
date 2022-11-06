@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
-
+        public decimal BasePrice { get; set; }
+        public string Ingredients { get; set; }
     }
 }
