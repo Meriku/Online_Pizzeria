@@ -12,4 +12,12 @@
         Beef,
         Tuna
     }
+
+    public enum StatusCodes
+    {
+        Ordered,
+        Cooking, 
+        Delivering,
+        Delivered
+    }
 }

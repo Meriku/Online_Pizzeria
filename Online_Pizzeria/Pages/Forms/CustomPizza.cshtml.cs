@@ -43,6 +43,8 @@ namespace Online_Pizzeria.Pages.Forms
 
             if (UserOrderDB != null)
             {
+                UserOrderDB.StatusCode = Models.StatusCodes.Ordered;
+
                 _context.PizzaOrders.Add(UserOrderDB);
                 _context.SaveChanges();
 

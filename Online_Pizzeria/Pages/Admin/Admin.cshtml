@@ -3,4 +3,41 @@
 @{
 }
 
-<h1 class="center"> Control Center </h1>
+<h1 class="center" id="Center"> Control Center </h1>
+<div class="center" style="width:175px">
+<ul class="nav">
+  <li><a id="Pizzas" class="unselectable">Pizzas</a></li>
+  <li><a id="Orders" class="unselectable">Orders</a></li>
+</ul>
+</div>
+
+<table class="table supportBack" style="width:900px">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>PizzaId</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Ordered</th>
+            <th>Delivered</th>
+        </tr>
+        @{
+            foreach (var row in Model.PizzaOrders) 
+            {  
+                    <tr>
+                        <th>@row.Id</th>
+                        @if (@row.PizzaId == null) {
+                            <th>Custom Pizza</th>
+                        }
+                        else{
+                            <th>@row.PizzaId</th>
+                        }     
+                        <th>@row.Price</th>
+                        <th>@row.StatusCode</th>
+                        <th>@row.Ordered</th>
+                        <th>@row.Delivered</th>
+                    </tr>
+            }
+        }
+    </thead>
+</table>

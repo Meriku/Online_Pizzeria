@@ -12,8 +12,8 @@ using Online_Pizzeria.DataBase;
 namespace Online_Pizzeria.Migrations
 {
     [DbContext(typeof(ApplicationDB))]
-    [Migration("20221106152959_UpdatedDB")]
-    partial class UpdatedDB
+    [Migration("20221106193127_AddedStatusCodes")]
+    partial class AddedStatusCodes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,11 +32,20 @@ namespace Online_Pizzeria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("Delivered")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Ordered")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("PizzaId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

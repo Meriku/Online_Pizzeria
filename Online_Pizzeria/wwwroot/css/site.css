@@ -86,3 +86,34 @@ body {
     -ms-user-select: none; 
     user-select: none; 
 }
+
+.adminMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.rightLi {
+    float:right;
+}
+
+ul.nav {
+    padding-left: 0px;
+    background-color: #3D99CE;
+    text-align: center;
+}
+
+ul.nav > li {
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+ul.nav > li:hover {
+    background-color: #2779BF;
+}
+
+ul.nav > li > a {
+    color: white;
+    text-decoration: none;
+}
+
