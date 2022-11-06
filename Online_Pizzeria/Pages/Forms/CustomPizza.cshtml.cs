@@ -34,8 +34,10 @@ namespace Online_Pizzeria.Pages.Forms
         public IActionResult OnPost()
         {
             var ingredients = ParseIngredients();
+            UserOrder.UserPizza.Name ??= "Custom Pizza";
             UserOrder.UserPizza.BasePrice = _defaultPrice;
             UserOrder.Price = UserOrder.UserPizza.BasePrice + _defaultIngredientPrice * ingredients.Count;
+            UserOrder.Ordered = DateTime.Now;
 
             var UserOrderDB = _mapper.Map(UserOrder);
 

@@ -25,7 +25,6 @@ namespace Online_Pizzeria.Pages.Checkout
         public void OnGet()
         {
             UserOrder = _context.PizzaOrders.First(x => x.Id == OrderId);
-
         }
 
     }

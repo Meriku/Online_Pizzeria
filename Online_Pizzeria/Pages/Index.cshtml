@@ -12,7 +12,7 @@
     </div>
     <div class="align-content-center">
         <div>
-            <a class="btn btn-primary mt-3 w-25" asp-area="" asp-page="/Pizza">Order a pizza</a>         
+            <a class="btn btn-primary mt-4 w-25" asp-area="" asp-page="/Pizza">Order a pizza</a>         
         </div>
         <div>
             <a class="btn btn-primary mt-4 w-25" asp-area="" asp-page="/CustomerSupport">Customer Support</a> 
@@ -26,16 +26,14 @@
 <div id="carouselExampleControls" class="carousel slide">
   <div class="carousel-inner">
     <div id="image" class="center">
-      <img class="smallImage" src="~/images/Pizza/Bolognese.png" title="Bolognese"/>
+      <img class="smallImage unselectable" src="~/images/AllPizzas/Bolognese.png" title="Bolognese"/>
     </div>
   </div>
-  <a id="leftButton" class="carousel-control-prev buttonsCarousel" role="button" data-slide="prev" style="padding-left:360px">
-    <span class="buttonsCarousel" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
+  <a id="leftButton" class="carousel-control-prev buttonsCarousel unselectable" role="button" data-slide="prev" style="padding-left:360px; text-decoration-style:solid">
+    <span class="sr-only"><</span>
   </a>
-  <a id="rightButton" class="carousel-control-next buttonsCarousel" role="button" data-slide="next" style="padding-right:370px">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
+  <a id="rightButton" class="carousel-control-next buttonsCarousel unselectable" role="button" data-slide="next" style="padding-right:370px">
+    <span class="sr-only">></span>
   </a>
 </div>
 </div>
@@ -47,7 +45,7 @@
     let imageEl = document.getElementById("image")
     let currentPizza = 0
 
-    let directory = "~/images/Pizza/"
+    let directory = "~/images/AllPizzas/"
     let extension = ".png"
 
     let pizzaNames = ["Bolognese", "Carbonara", "Hawaiian", "Margerita", "MeatFeast", "Mushroom", "Pepperoni", "Seafood", "Vegetarian"]
@@ -79,7 +77,7 @@
 
     function ChangeHTML() {
         let name = pizzaNames[currentPizza]
-        imageEl.innerHTML = `<img class="smallImage" src="images/Pizza/${name}.png" title="Carbonara"/>`
+        imageEl.innerHTML = `<img class="smallImage" src="images/AllPizzas/${name}.png" title="Carbonara"/>`
     }
 
 </script>

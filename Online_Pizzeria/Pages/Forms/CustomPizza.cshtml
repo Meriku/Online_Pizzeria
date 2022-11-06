@@ -3,26 +3,30 @@
 @{
 }
 
-<div class="text-center container">
-    <h1>Create your own Pizza</h1>
+<div>
+    <div class="supportBack" style="margin: auto; width: 500px">
+    <h1 class="text-center">Create your own Pizza</h1>
 
-    <form method="post" class="mx-auto mt-5 mb-5 px-5 pt-5 rounded alert-light col-4">
-        <input id="name" type="text" placeholder="Enter Pizza Name" asp-for="UserOrder.UserPizza.Name"/>
+    <form align="center" method="post">
+        <input id="name" placeholder="Enter Pizza Name" style="text-align:center; margin:20px" asp-for="UserOrder.UserPizza.Name"/>
         <br />
         @{
             var number = 0;
             foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
             {
-                <input id="@number" type="checkbox" placeholder="@IngredientName" style="width:100px"/> @IngredientName
+                <input id="@number" type="checkbox" style="margin: auto; text-align:center" placeholder="@IngredientName"/> @IngredientName
                 <br />
                 number++;
             }
-            <input id="ingredientsList" hidden="true" type="text" asp-for="UserOrder.UserPizza.Ingredients" />
-        }      
-        <button id="button" class="btn btn-primary mt-1" type="submit">Order</button>
-    </form>
+                <input id="ingredientsList" hidden="true" type="text" asp-for="UserOrder.UserPizza.Ingredients" />
+        }  
         <br />
-        <p id="allIngredients"></p>
+        <button id="button" class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Order</button>       
+        <br />
+    </form>
+    </div>
+    <br />
+    <p style="text-align:center; margin:20px" id="allIngredients"></p>
 </div>
 
 <script>   

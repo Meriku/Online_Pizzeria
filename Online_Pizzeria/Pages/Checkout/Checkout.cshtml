@@ -2,13 +2,13 @@
 @model Online_Pizzeria.Pages.Checkout.CheckoutModel
 
 @{
-    var imagePath = "~/images/Pizza/Create.png"; //+ (@Model.UserOrder.UserPizza.Name + ".png");
+    var imagePath = "~/images/AllPizzas/Create.png"; //+ (@Model.UserOrder.UserPizza.Name + ".png");
 }
 
     <div class="supportBack"> 
         <h5 class="center">Please, check your Order</h5>
         <br />
-        <p class="center m-0">Your Pizza Name: @Model.UserOrder.Id</p>
+        <p class="center m-0">Order Number: @Model.UserOrder.Id</p>
         <p class="center m-0">Order Price: @Model.UserOrder.Price</p>      
     </div>
     <div  class="center">  

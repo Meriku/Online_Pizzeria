@@ -41,7 +41,8 @@ namespace Online_Pizzeria.Logic
                     {
                         var result = new OrderDBModel()
                         {
-                            Price = OrderUser.Price
+                            Price = OrderUser.Price,
+                            Ordered = OrderUser.Ordered
                         };
                         return result as TT;
                     }
