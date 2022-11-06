@@ -2,7 +2,7 @@
 
 namespace Online_Pizzeria.Logic
 {
-    public class Mapper<T, TT> 
+    public class Mapper<T, TT>
         where TT : class
         where T : class
     {
