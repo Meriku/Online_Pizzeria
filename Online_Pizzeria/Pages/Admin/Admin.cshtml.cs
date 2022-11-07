@@ -20,7 +20,6 @@ namespace Online_Pizzeria.Pages.Admin
         [BindProperty]
         public PizzaDBModel CreatePizza { get; set; }
 
-
         public AdminModel(ApplicationDB context)
         {
             _context = context;
@@ -29,10 +28,13 @@ namespace Online_Pizzeria.Pages.Admin
         public async Task<IActionResult> OnGetAsync()
         {
             var sessionId = this.Request.Cookies["sessionId"];
+            var deletePizzaId = this.Request.Query["deletePizzaId"];
             IsOrders = this.Request.Query["view"].Equals("Orders");
 
             if (Sessions.CheckSessionId(sessionId))
             {
+                if (Helper.ParseInt(deletePizzaId, out int Id)) {DeletePizza(Id); } 
+
                 PizzaOrders = await GetOrders();
                 Pizzas = await GetPizzas();
 
@@ -73,6 +75,22 @@ namespace Online_Pizzeria.Pages.Admin
         private async Task<List<PizzaDBModel>> GetPizzas()
         {
             return await _context.Pizzas.AsNoTracking().ToListAsync();
+        }
+
+        private void DeletePizza(int? id)
+        {
+            if (id == null) { throw new ArgumentNullException("Pizza id was null"); }
+            try
+            {
+                _context.Pizzas.Remove(new PizzaDBModel() { Id = (int)id });
+                _context.SaveChanges();
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
     }
 }

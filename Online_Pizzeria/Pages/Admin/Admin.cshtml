@@ -57,18 +57,23 @@
                 <th>Name</th>
                 <th>BasePrice</th>
                 <th>Ingredients</th>
+                <th></th>
                 </tr>  
                 </thead>
 
-                <tbody>
+                <tbody class="tableMain">
               
                     @foreach (var row in Model.Pizzas) 
-                    {             
+                {
+                    var ingr = row.Ingredients.Length > 30 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 30).LastIndexOf(",")) + " ..." : row.Ingredients;             
                         <tr>
                             <th>@row.Id</th>    
                             <th>@row.Name</th>
                             <th>@row.BasePrice</th>
-                            <th>@row.Ingredients</th>
+                            <th>@ingr</th>
+                            <th>
+                                <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
+                            </th>
                         </tr>
                     }
                     <tr>
@@ -153,7 +158,9 @@
             }
             id++
         }
-        ingredientsListEl.value = ingredients       
+        ingredientsListEl.value = ingredients.join(", ")       
     }
+
+
 
 </script>
