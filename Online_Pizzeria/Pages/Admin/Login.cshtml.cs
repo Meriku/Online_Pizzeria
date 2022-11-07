@@ -19,25 +19,23 @@ namespace Online_Pizzeria.Pages.Login
             _configuration = configuration;
         }
 
-        public void OnGet()
-        {
-            
-        }
-
-        public IActionResult OnPost()
+        public IActionResult OnGet()
         {
             var sessionIdExisting = this.Request.Cookies["sessionId"];
             if (Sessions.CheckSessionId(sessionIdExisting))
             {
-                return (Redirect($"/Admin/Admin"));
+                return Redirect($"/Admin/Admin");
             }
+            return Page();
+        }
 
+        public IActionResult OnPost()
+        {
             if (Sessions.Login(_configuration, Login, Password, out var sessionId))
             {
                 Console.WriteLine($"Logged in successfully::Log {DateTime.Now:G}");
-
                 Response.Cookies.Append("sessionId", $"{sessionId}");
-                return (Redirect($"/Admin/Admin"));
+                return Redirect($"/Admin/Admin");
             }
             else
             {

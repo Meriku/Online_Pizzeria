@@ -3,14 +3,15 @@
 @{
 }
 
-<h1 class="center" id="Center"> Control Center </h1>
-<div class="center" style="width:175px">
-<ul class="nav">
-  <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
-  <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
-</ul>
-</div>
 
+<div class="center supportBack controlCenter">
+    <h5 class="center controlCenterText" id="Center"> Control Center </h5>
+    <ul class="nav">
+      <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
+      <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
+    </ul>
+</div>
+<br />
 <table class="table supportBack" style="width:900px">
     <thead>
         @{

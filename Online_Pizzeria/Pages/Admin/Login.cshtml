@@ -3,13 +3,13 @@
 @{
 }
 
-<div class="supportBack" style="margin: auto; width: 300px">
+<div class="supportBack" style="margin: auto; width: 300px; height:220px">
     <form align="center" method="post"> 
-        <input type="text" placeholder="Enter Login" style="text-align:center; margin:20px" asp-for="Login"/>
-        <input type="password" placeholder="Enter Password" style="text-align:center; margin:20px" asp-for="Password"/> 
-        <button class="btn btn-primary mt-0 centerButton" style="margin: auto; width:150px" type="submit">Submit</button>  
+        <div style="margin: auto; padding: 30px 0px 20px 0px;">
+            <input type="text" class="inputLogin" placeholder="Enter Login" asp-for="Login"/>
+            <input type="password" class="inputLogin" placeholder="Enter Password" asp-for="Password"/> 
+        </div>
+        <button class="btn btn-primary centerButton buttonLogin" type="submit">Submit</button>  
     </form>
 </div>
-<div style="margin:20px;">
 
-</div>
