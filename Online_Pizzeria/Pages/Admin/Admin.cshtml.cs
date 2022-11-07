@@ -29,15 +29,22 @@ namespace Online_Pizzeria.Pages.Admin
             if (Sessions.CheckSessionId(sessionId))
             {
                 this.Response.StatusCode = 200;
+                if (IsOrders)
+                {
+                    PizzaOrders = _context.PizzaOrders;
+                }
+                else
+                {
+                    Pizzas = _context.Pizzas;
+                }
             }
             else
             {
                 this.Response.StatusCode = 401;
-                Response.Redirect("/Error");
+                Response.Redirect("/Index");
             }
 
-            PizzaOrders = _context.PizzaOrders;
-            Pizzas = _context.Pizzas;
+      
         }
     }
 }

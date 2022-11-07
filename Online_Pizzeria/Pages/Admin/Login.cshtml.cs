@@ -26,17 +26,24 @@ namespace Online_Pizzeria.Pages.Login
 
         public IActionResult OnPost()
         {
+            var sessionIdExisting = this.Request.Cookies["sessionId"];
+            if (Sessions.CheckSessionId(sessionIdExisting))
+            {
+                return (Redirect($"/Admin/Admin"));
+            }
+
             if (Sessions.Login(_configuration, Login, Password, out var sessionId))
             {
                 Console.WriteLine($"Logged in successfully::Log {DateTime.Now:G}");
 
                 Response.Cookies.Append("sessionId", $"{sessionId}");
-                return (Redirect($"/Admin/Admin?view=Orders"));
+                return (Redirect($"/Admin/Admin"));
             }
             else
             {
                 Console.WriteLine($"Login attempt failed::Log {DateTime.Now:G}");
-                return RedirectToPage("/Error");
+                this.Response.StatusCode = 401;
+                return RedirectToPage("/Index");
             }
         }
     }

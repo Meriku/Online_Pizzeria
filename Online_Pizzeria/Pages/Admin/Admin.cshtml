@@ -6,24 +6,26 @@
 <h1 class="center" id="Center"> Control Center </h1>
 <div class="center" style="width:175px">
 <ul class="nav">
-  <li><a id="Pizzas" class="unselectable" asp-page="Checkout/Checkout" >Pizzas</a></li>
-  <li><a id="Orders" class="unselectable" asp-page="Checkout/Checkout" >Orders</a></li>
+  <li><a id="Pizzas" class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
+  <li><a id="Orders" class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
 </ul>
 </div>
 
 <table class="table supportBack" style="width:900px">
     <thead>
-        <tr>
-            <th>Id</th>
-            <th>PizzaId</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Ordered</th>
-            <th>Delivered</th>
-        </tr>
         @{
-            foreach (var row in Model.PizzaOrders) 
-            {  
+            if(Model.IsOrders)
+            {
+                <tr>
+                <th>Id</th>
+                <th>PizzaId</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Ordered</th>
+                <th>Delivered</th>
+                </tr>
+                foreach (var row in Model.PizzaOrders) 
+                {  
                     <tr>
                         <th>@row.Id</th>
                         @if (@row.PizzaId == null) {
@@ -37,6 +39,16 @@
                         <th>@row.Ordered</th>
                         <th>@row.Delivered</th>
                     </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>BasePrice</th>
+                <th>Ingredients</th>
+                </tr>  
             }
         }
     </thead>
