@@ -145,3 +145,15 @@ ul.nav > li > a {
     border-radius: 0.3rem;
     border-color: whitesmoke;
 }
+
+.buttonTable {
+    background: white;
+    margin: auto;
+    padding: 5px 5px 5px 5px;
+    border-radius: 0.3rem;
+}
+
+.buttonTable:hover {
+    background-color: whitesmoke;
+    border-radius: 0.3rem;
+}

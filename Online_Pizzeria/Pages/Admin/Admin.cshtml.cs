@@ -12,10 +12,14 @@ namespace Online_Pizzeria.Pages.Admin
 
         private readonly ApplicationDB _context;
         public bool IsOrders { get; set; }
-        //public DbSet<OrderDBModel> PizzaOrders { get; set; }
-        //public DbSet<PizzaDBModel> Pizzas { get; set; }
-        public List<OrderDBModel> PizzaOrders { get; set;}
-        public List<PizzaDBModel> Pizzas { get; set; }
+        public List<OrderDBModel> PizzaOrders { get; set; } = new List<OrderDBModel>();
+        public List<PizzaDBModel> Pizzas { get; set; } = new List<PizzaDBModel>();
+
+        public string[] Ingedients => Helper.GetPossibleIngredients();
+
+        [BindProperty]
+        public PizzaDBModel CreatePizza { get; set; }
+
 
         public AdminModel(ApplicationDB context)
         {
@@ -41,6 +45,26 @@ namespace Online_Pizzeria.Pages.Admin
             }
         }
 
+        public IActionResult OnPost()
+        {
+            var sessionId = this.Request.Cookies["sessionId"];
+            if (Sessions.CheckSessionId(sessionId))
+            {
+                if (CreatePizza != null)
+                {
+                    _context.Pizzas.Add(CreatePizza);
+                    _context.SaveChanges();
+                }
+
+                return Redirect($"/Admin/Admin?view=Pizzas");
+            }
+            else
+            {
+                this.Response.StatusCode = 401;
+                return RedirectToPage("/Index");
+            }
+           
+        }
 
         private async Task<List<OrderDBModel>> GetOrders()
         {

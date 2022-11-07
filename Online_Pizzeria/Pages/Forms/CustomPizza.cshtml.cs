@@ -63,7 +63,7 @@ namespace Online_Pizzeria.Pages.Forms
                 return list;
             }
 
-            foreach (var IngredientName in Enum.GetNames(typeof(Ingredient)))
+            foreach (var IngredientName in Helper.GetPossibleIngredients())
             {
                 if (UserOrder.UserPizza.Ingredients.Contains(IngredientName))
                 {
