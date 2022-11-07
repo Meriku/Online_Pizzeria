@@ -13,11 +13,6 @@ namespace Online_Pizzeria.Pages.Checkout
         private Mapper<OrderUserModel, OrderDBModel> _mapper;
         public OrderDBModel UserOrder { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public int? OrderId { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string? pizzaName { get; set; }
-
         public CheckoutModel(ApplicationDB context)
         {
             _context = context;
@@ -26,17 +21,35 @@ namespace Online_Pizzeria.Pages.Checkout
 
         public void OnGet()
         {
-            if (OrderId != null)
-            {
-                UserOrder = _context.PizzaOrders.First(x => x.Id == OrderId);
+            var CustomPizzaOrderId = this.Request.Query["OrderId"];
+            var PizzaFromDBName = this.Request.Query["PizzaName"];
+
+            if (Helper.ParseInt(CustomPizzaOrderId, out int id)) 
+            { 
+                UserOrder = _context.PizzaOrders.First(x => x.Id == id); 
             }
-            else if (pizzaName != null)
+
+            else if (PizzaFromDBName.Count > 0) 
             {
-                UserOrder = new OrderDBModel()
+                var pizza = _context.Pizzas.FirstOrDefault(x => x.Name.Equals(PizzaFromDBName[0]));
+
+                if (pizza == null)
                 {
-                    Price = 500,
+                    throw new ArgumentNullException("Pizza null on Checkout");
+                }
+
+                UserOrder = new OrderDBModel() 
+                { 
+                    PizzaId = pizza.Id,
+                    Price = pizza.BasePrice,
+                    StatusCode = Models.StatusCodes.Ordered,
+                    Ordered = DateTime.Now
                 };
-            }
+
+                _context.PizzaOrders.Add(UserOrder);
+                _context.SaveChanges();
+
+            } 
             
         }
 

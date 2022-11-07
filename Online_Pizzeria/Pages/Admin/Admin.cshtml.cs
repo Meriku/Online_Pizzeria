@@ -27,9 +27,10 @@ namespace Online_Pizzeria.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync()
         {
+            IsOrders = this.Request.Query["view"].Equals("Orders");
+
             var sessionId = this.Request.Cookies["sessionId"];
             var deletePizzaId = this.Request.Query["deletePizzaId"];
-            IsOrders = this.Request.Query["view"].Equals("Orders");
 
             if (Sessions.CheckSessionId(sessionId))
             {
