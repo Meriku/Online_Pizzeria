@@ -12,39 +12,43 @@ namespace Online_Pizzeria.Pages.Admin
 
         private readonly ApplicationDB _context;
         public bool IsOrders { get; set; }
-        public DbSet<OrderDBModel> PizzaOrders { get; set; }
-        public DbSet<PizzaDBModel> Pizzas { get; set; }
-        
+        //public DbSet<OrderDBModel> PizzaOrders { get; set; }
+        //public DbSet<PizzaDBModel> Pizzas { get; set; }
+        public List<OrderDBModel> PizzaOrders { get; set;}
+        public List<PizzaDBModel> Pizzas { get; set; }
 
         public AdminModel(ApplicationDB context)
         {
             _context = context;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             var sessionId = this.Request.Cookies["sessionId"];
             IsOrders = this.Request.Query["view"].Equals("Orders");
 
             if (Sessions.CheckSessionId(sessionId))
             {
-                this.Response.StatusCode = 200;
-                if (IsOrders)
-                {
-                    PizzaOrders = _context.PizzaOrders;
-                }
-                else
-                {
-                    Pizzas = _context.Pizzas;
-                }
+                PizzaOrders = await GetOrders();
+                Pizzas = await GetPizzas();
+
+                return Page();
             }
             else
             {
                 this.Response.StatusCode = 401;
-                Response.Redirect("/Index");
+                return Redirect("/Index");
             }
+        }
 
-      
+
+        private async Task<List<OrderDBModel>> GetOrders()
+        {
+            return await _context.PizzaOrders.AsNoTracking().ToListAsync();
+        }
+        private async Task<List<PizzaDBModel>> GetPizzas()
+        {
+            return await _context.Pizzas.AsNoTracking().ToListAsync();
         }
     }
 }
