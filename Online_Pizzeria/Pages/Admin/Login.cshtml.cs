@@ -29,7 +29,9 @@ namespace Online_Pizzeria.Pages.Login
             if (Sessions.Login(_configuration, Login, Password, out var sessionId))
             {
                 Console.WriteLine($"Logged in successfully::Log {DateTime.Now:G}");
-                return Redirect($"/Admin/Admin?sessionId={sessionId}");
+
+                Response.Cookies.Append("sessionId", $"{sessionId}");
+                return (Redirect($"/Admin/Admin?view=Orders"));
             }
             else
             {

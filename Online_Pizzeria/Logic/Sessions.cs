@@ -23,11 +23,11 @@
             }
         }
 
-        public static bool CheckSessionId(string sessionId)
+        public static bool CheckSessionId(string? sessionId)
         {
             ActiveSessions ??= new List<string>();
 
-            return ActiveSessions.Contains(sessionId);
+            return sessionId != null && ActiveSessions.Contains(sessionId);
         }
 
     }

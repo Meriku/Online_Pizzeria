@@ -6,8 +6,8 @@
 <h1 class="center" id="Center"> Control Center </h1>
 <div class="center" style="width:175px">
 <ul class="nav">
-  <li><a id="Pizzas" class="unselectable">Pizzas</a></li>
-  <li><a id="Orders" class="unselectable">Orders</a></li>
+  <li><a id="Pizzas" class="unselectable" asp-page="Checkout/Checkout" >Pizzas</a></li>
+  <li><a id="Orders" class="unselectable" asp-page="Checkout/Checkout" >Orders</a></li>
 </ul>
 </div>
 
@@ -41,3 +41,14 @@
         }
     </thead>
 </table>
+<p id="test"></p>
+
+<script>
+
+  window.onload = () => {
+
+
+        document.getElementById("test").innerHTML = Model.PizzaOrders[0].Id
+    }
+
+</script>

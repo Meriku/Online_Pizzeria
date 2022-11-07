@@ -14,7 +14,9 @@ namespace Online_Pizzeria.Pages.Checkout
         public OrderDBModel UserOrder { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int OrderId { get; set; }
+        public int? OrderId { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string? pizzaName { get; set; }
 
         public CheckoutModel(ApplicationDB context)
         {
@@ -24,7 +26,18 @@ namespace Online_Pizzeria.Pages.Checkout
 
         public void OnGet()
         {
-            UserOrder = _context.PizzaOrders.First(x => x.Id == OrderId);
+            if (OrderId != null)
+            {
+                UserOrder = _context.PizzaOrders.First(x => x.Id == OrderId);
+            }
+            else if (pizzaName != null)
+            {
+                UserOrder = new OrderDBModel()
+                {
+                    Price = 500,
+                };
+            }
+            
         }
 
     }

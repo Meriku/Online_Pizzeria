@@ -11,9 +11,10 @@ namespace Online_Pizzeria.Pages.Admin
     {
 
         private readonly ApplicationDB _context;
-        public DbSet<OrderDBModel> PizzaOrders;
-        public DbSet<PizzaDBModel> Pizzas;
-
+        public bool IsOrders { get; set; }
+        public DbSet<OrderDBModel> PizzaOrders { get; set; }
+        public DbSet<PizzaDBModel> Pizzas { get; set; }
+        
 
         public AdminModel(ApplicationDB context)
         {
@@ -22,7 +23,8 @@ namespace Online_Pizzeria.Pages.Admin
 
         public void OnGet()
         {
-            var sessionId = this.Request.Query["sessionId"];
+            var sessionId = this.Request.Cookies["sessionId"];
+            IsOrders = this.Request.Query["view"].Equals("Orders");
 
             if (Sessions.CheckSessionId(sessionId))
             {
@@ -33,7 +35,6 @@ namespace Online_Pizzeria.Pages.Admin
                 this.Response.StatusCode = 401;
                 Response.Redirect("/Error");
             }
-
 
             PizzaOrders = _context.PizzaOrders;
             Pizzas = _context.Pizzas;
