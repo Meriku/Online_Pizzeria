@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Online_Pizzeria.DataBase;
 using Online_Pizzeria.Logic;
 using Online_Pizzeria.Models;
+using System.IO;
 
 namespace Online_Pizzeria.Pages.Forms
 {
@@ -21,10 +22,16 @@ namespace Online_Pizzeria.Pages.Forms
 
         public void OnGet()
         {
-            PizzasNames ??= new string[] { "Bolognese", "Carbonara", "Hawaiian", "Margerita", "MeatFeast", "Mushroom", "Pepperoni", "Seafood", "Vegetarian" };
-            
-
-
+            PizzasNames = _context.Pizzas.Select(x => x.Name).ToArray();
+            foreach (var pizza in PizzasNames)
+            {
+                var imgsrc = @$"wwwroot/images/AllPizzas/{pizza}.png";
+                if (!System.IO.File.Exists(imgsrc))
+                {
+                    System.IO.File.Copy(@"wwwroot/images/AllPizzas/Create.png", imgsrc);
+                    Console.WriteLine($"Default image was created for {pizza}::LOG {DateTime.Now:G}");
+                }
+            }
         }
     }
 }
