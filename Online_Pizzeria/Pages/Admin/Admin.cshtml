@@ -7,160 +7,245 @@
 <div class="center supportBack controlCenter">
     <h5 class="center controlCenterText" id="Center"> Control Center </h5>
     <ul class="nav">
-      <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
-      <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
+        <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
+        <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
     </ul>
 </div>
 <br />
-<table class="table supportBack" style="width:900px;">    
-        @{
-            if(Model.IsOrders)
-            {
-                <thead>
+<table class="table supportBack" style="width:900px;">
+    @{
+        if (Model.IsOrders)
+        {
+            <thead>
                 <tr>
-                <th>Id</th>
-                <th>PizzaId</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Ordered</th>
-                <th>Delivered</th>
-                </tr>              
-                </thead>
+                    <th>Id</th>
+                    <th>PizzaId</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Ordered</th>
+                    <th>Delivered</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-                <tbody>
-                @foreach (var row in Model.PizzaOrders) 
-                {                       
-                    <tr>
-                    <th>@row.Id</th>
-
-                    @if (@row.PizzaId == null) 
-                    {
-                        <th>Custom Pizza</th>
-                    }
-                    else
-                    {    
-                        <th>@row.PizzaId</th>
-                    }     
-                    <th>@row.Price</th>
-                    <th>@row.StatusCode</th>
-                    <th>@row.Ordered</th>
-                    <th>@row.Delivered</th>
-                    </tr>                            
-                }
-                </tbody>
-            }
-            else
-            {
-                <thead>
-                <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>BasePrice</th>
-                <th>Ingredients</th>
-                <th></th>
-                </tr>  
-                </thead>
-
-                <tbody class="tableMain">
-              
-                    @foreach (var row in Model.Pizzas) 
+            <tbody class="tableMain">
+                @foreach (var row in Model.PizzaOrders)
                 {
-                    var ingr = row.Ingredients.Length > 30 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 30).LastIndexOf(",")) + " ..." : row.Ingredients;             
-                        <tr>
-                            <th>@row.Id</th>    
-                            <th>@row.Name</th>
-                            <th>@row.BasePrice</th>
-                            <th>@ingr</th>
-                            <th>
-                                <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
-                            </th>
-                        </tr>
-                    }
-                    <tr>
-                        <th></th>    
-                        <th id="AddNew">Add New Pizza</th>
-                        <th></th>
-                        <th></th>
-                    </tr>  
-                </tbody>
+                    var rowId = $"ordersRow_" + row.Id;
+                    <tr id="@rowId">
+                        <th>@row.Id</th>
 
-            }
+                        @if (@row.PizzaId == null)
+                        {
+                            <th>Custom Pizza</th>
+                        }
+                        else
+                        {
+                            <th>@row.PizzaId</th>
+                        }
+                        <th>@row.Price</th>
+                        <th>@row.StatusCode</th>
+                        <th>@row.Ordered</th>
+                        <th>@row.Delivered</th>
+
+                        <th><p id="@row.Id" class="editOrderButton unselectable">Edit</p></th>
+                    </tr>
+                }
+            </tbody>
         }
-    
+        else
+        {
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>BasePrice</th>
+                    <th>Ingredients</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody class="tableMain">
+
+                @foreach (var row in Model.Pizzas)
+                {
+                    var ingr = row.Ingredients.Length > 50 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 50).LastIndexOf(",")) + " ..." : row.Ingredients;
+                    <tr>
+                        <th>@row.Id</th>
+                        <th>@row.Name</th>
+                        <th>@row.BasePrice</th>
+                        <th>@ingr</th>
+                        <th>
+                            <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
+                        </th>
+                    </tr>
+                }
+                <tr>
+                    <th></th>
+                    <th id="addNewPizzaButton">Add New Pizza</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tbody>
+
+        }
+    }
+
 </table>
 
-<div id="partialModal" class="modal" tabindex="-1" role="dialog">
+<div id="modalCreatePizza" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Pizza Details Form</h5>
-                <button type="button" id="dismiss" class="close" aria-label="Close">
+                <button type="button" id="dismissCreatePizza" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <input id="createPizza_name" type="text" placeholder="Enter Pizza Name" class="center" />
+                <br />
+                <input id="createPizza_price" type="text" placeholder="Enter Pizza Price" class="center" />
+                <br />
+                @{
+                    foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
+                    {
+                        <input type="checkbox" class="ingredientCheckbox" placeholder="@IngredientName" /> @IngredientName
+                        <br />
+                    }
+                }
+                <br />
+                <button id="createPizza_Button" class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditOrder" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pizza Details Form</h5>
+                <button type="button" id="dismissEditOrder" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form align="center" method="post">
-                    <input id="name" type="text" placeholder="Enter Pizza Name" style="text-align:center" asp-for="CreatePizza.Name"/>
-                    <br />
-                    <input id="price" type="text" placeholder="Enter Pizza Price" style="text-align:center" asp-for="CreatePizza.BasePrice"/>
-                    <br />
-
-                    @{
-                        var number = 0;
-                        foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
-                        {
-                            <input id="@number" type="checkbox" style="margin: auto; text-align:center" placeholder="@IngredientName"/> @IngredientName
-                            <br />
-                            number++;
-                        }
-                        <input id="ingredientsList" hidden="true" type="text" asp-for="CreatePizza.Ingredients" />
-                    }         
-                    <br />
-                    <button class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Add</button>   
-                </form>
+                <table class="table supportBack">
+                    <tbody class="tableMain">
+                        <tr>
+                            <th><p class="editModal">Order Id: </p></th>
+                            <th><p class="editModal" id="modal_orderId"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Pizza Name: </p></th>
+                            <th><p class="editModal" id="modal_pizzaName"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Price: </p></th>
+                            <th><p class="editModal" id="modal_price"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Status: </p></th>
+                            <th class="editModal">@Html.DropDownListFor(m => m.NewOrderStatus, new SelectList(Model.Statuses))</th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Ordered: </p></th>
+                            <th><p class="editModal" id="modal_ordered"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Delivered: </p></th>
+                            <th><p class="editModal" id="modal_delivered"></p></th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <button id="editOrderButton" class="btn btn-primary mt-1 centerButton" style="margin: auto;">Save Changes</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-
-    document.getElementById("AddNew").addEventListener("click", Show)
-    document.getElementById("dismiss").addEventListener("click", Hide)
-
-    function Show() {
-        $("#partialModal").modal('show');
-    }
-    function Hide() {
-        $("#partialModal").modal('hide');
-    }
-    
-    let ingredientsListEl = document.getElementById("ingredientsList")
-    
     window.onload = () => {
-        let id = 0
-        while (document.getElementById(id) !== null) 
-        {
-            document.getElementById(id).addEventListener("click", MergeIngredients)      
-            id++
+        if (document.getElementById("addNewPizzaButton") !== null) {
+            document.getElementById("addNewPizzaButton").addEventListener("click", showCreatePizza)
+        }
+
+        for (let button of document.getElementsByClassName("editOrderButton")) {
+            button.addEventListener("click", () => { showEditOrder(button.id) })
         }
     }
 
-    function MergeIngredients() {
+    function showCreatePizza() {
+        $("#modalCreatePizza").modal('show');
+
+        document.getElementById("dismissCreatePizza").addEventListener("click", hideCreatePizza)
+        document.getElementById('createPizza_Button').addEventListener("click", sendCreatePizzaRequest)
+        for (let checkbox of document.getElementsByClassName("ingredientCheckbox")) {
+            checkbox.addEventListener("click", ingredientsToString)
+        }
+    }
+    function hideCreatePizza() {
+        $("#modalCreatePizza").modal('hide');
+    }
+
+    function showEditOrder(orderId) {
+        let row = document.getElementById('ordersRow_' + orderId)
+        document.getElementById('modal_orderId').innerText = row.cells[0].textContent
+        document.getElementById('modal_pizzaName').innerText = row.cells[1].textContent
+        document.getElementById('modal_price').innerText = row.cells[2].textContent
+        document.getElementById('modal_ordered').innerText = row.cells[4].textContent
+        document.getElementById('modal_delivered').innerText = row.cells[5].textContent
+
+        $("#modalEditOrder").modal('show');
+        document.getElementById("dismissEditOrder").addEventListener("click", hideEditOrder)
+        document.getElementById('editOrderButton').addEventListener("click", sendEditOrderRequest)
+    }
+    function hideEditOrder() {
+        $("#modalEditOrder").modal('hide');
+    }
+
+    function ingredientsToString() {
         let ingredients = []
-        let id = 0;
-        while (document.getElementById(id) !== null) 
-        {
-            let element = document.getElementById(id) 
-            if (element.checked) 
-            {
-                ingredients.push(element.placeholder)
+        for (let checkbox of document.getElementsByClassName("ingredientCheckbox")) {
+            if (checkbox.checked) {
+                ingredients.push(checkbox.placeholder)
             }
-            id++
         }
-        ingredientsListEl.value = ingredients.join(", ")       
+        return ingredients.join(", ")
     }
 
+    function sendEditOrderRequest() {
+        $.ajax({
+            type: 'POST',
+            url: "Admin/",
+            headers: {
+                RequestName: "EditOrderRequest",
+                OrderId: document.getElementById('modal_orderId').innerText,
+                OrderStatus: document.getElementById('NewOrderStatus').value,
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            }
+        })
+        hideEditOrder()
+    }
+
+    function sendCreatePizzaRequest() {
+        $.ajax({
+            type: 'POST',
+            url: "Admin/",
+            headers: {
+                RequestName: "CreatePizzaRequest",
+                Name: document.getElementById('createPizza_name').value,
+                BasePrice: document.getElementById('createPizza_price').value,
+                Ingredients: ingredientsToString(),
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            }
+        })
+        hideCreatePizza()
+    }
 
 
 </script>
