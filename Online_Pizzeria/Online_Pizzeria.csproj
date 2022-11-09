@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Admin\PizzaPartialView.cshtml" />
+    <Content Remove="Pages\Admin\_OrdersTable.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-    <None Include="Pages\Admin\PizzaPartialView.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,11 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Admin\PizzaPartialView.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Admin\_OrdersTable.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Admin\PizzaPartialView.cshtml" />
+    <UpToDateCheckInput Remove="Pages\Admin\_OrdersTable.cshtml" />
   </ItemGroup>
 
 </Project>

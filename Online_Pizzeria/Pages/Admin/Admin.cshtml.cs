@@ -11,19 +11,13 @@ namespace Online_Pizzeria.Pages.Admin
 {
     public class AdminModel : PageModel
     {
-
         private readonly ApplicationDB _context;
         private readonly IConfiguration _configuration;
-        public bool IsOrders { get; set; }
         
-        public List<OrderDBModel> PizzaOrders { get; set; } = new List<OrderDBModel>();
-        public List<PizzaDBModel> Pizzas { get; set; } = new List<PizzaDBModel>();
-
         public string[] Ingedients => Helper.GetPossibleIngredients();
         public string[] Statuses => Helper.GetPossibleStatuses();
 
-        [BindProperty]
-        public string NewOrderStatus { get; set; } //TODO: Load from DB current status
+        public bool IsOrders { get; set; }
 
         public AdminModel(ApplicationDB context, IConfiguration configuration)
         {
@@ -31,19 +25,15 @@ namespace Online_Pizzeria.Pages.Admin
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             IsOrders = this.Request.Query["view"].Equals("Orders");
+            var deletePizzaId = this.Request.Query["deletePizzaId"];
 
             var sessionId = this.Request.Cookies["sessionId"];
-            var deletePizzaId = this.Request.Query["deletePizzaId"];
-           
             if (Sessions.CheckSessionId(sessionId))
             {
-                if (Helper.ParseInt(deletePizzaId, out int Id)) {DeletePizza(Id); } 
-
-                PizzaOrders = await GetOrders();
-                Pizzas = await GetPizzas();
+                if (Helper.ParseInt(deletePizzaId, out int Id)) { DeletePizza(Id); }
 
                 return Page();
             }
@@ -54,7 +44,7 @@ namespace Online_Pizzeria.Pages.Admin
             }
         }
 
-        public IActionResult OnPost()
+        public void OnPost()
         {
             var sessionId = this.Request.Cookies["sessionId"];
             
@@ -64,18 +54,17 @@ namespace Online_Pizzeria.Pages.Admin
 
                 if (requestName.Equals("EditOrderRequest"))
                 {
-                    return EditOrder();
+                    EditOrder();
                 }
                 if (requestName.Equals("CreatePizzaRequest"))
                 {
-                    return CreatePizza();
+                    CreatePizza();
                 }
-                return Page();
             }
             else
             {
                 this.Response.StatusCode = 401;
-                return RedirectToPage("/Index");
+                RedirectToPage("/Index");
             }        
         }
 
@@ -98,7 +87,7 @@ namespace Online_Pizzeria.Pages.Admin
             _context.Pizzas.Add(pizza);
             _context.SaveChanges();
 
-            return RedirectToPage($"/Admin/Admin?view=Pizzas");
+            return Page();
         }
 
         private IActionResult EditOrder()
@@ -125,17 +114,7 @@ namespace Online_Pizzeria.Pages.Admin
                 }
                 _context.SaveChanges();
             }
-
-            return RedirectToPage($"/Admin/Admin?view=Orders");
-        }
-
-        private async Task<List<OrderDBModel>> GetOrders()
-        {
-            return await _context.PizzaOrders.AsNoTracking().ToListAsync();
-        }
-        private async Task<List<PizzaDBModel>> GetPizzas()
-        {
-            return await _context.Pizzas.AsNoTracking().ToListAsync();
+            return RedirectToPage("/Admin/Admin");
         }
 
         private void DeletePizza(int? id)

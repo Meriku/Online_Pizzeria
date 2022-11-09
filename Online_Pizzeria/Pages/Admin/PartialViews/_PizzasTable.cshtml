@@ -1,0 +1,39 @@
+﻿@page
+@model Online_Pizzeria.Pages.Admin.PartialViews._PizzasTableModel
+@{
+    Layout = "";
+}
+<table class="table supportBack" style="width:900px;">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>BasePrice</th>
+            <th>Ingredients</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody class="tableMain">
+
+        @foreach (var row in Model.Pizzas)
+        {
+            var ingr = row.Ingredients.Length > 50 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 50).LastIndexOf(",")) + " ..." : row.Ingredients;
+            <tr>
+                <th>@row.Id</th>
+                <th>@row.Name</th>
+                <th>@row.BasePrice</th>
+                <th>@ingr</th>
+                <th>
+                    <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
+                </th>
+            </tr>
+        }
+        <tr>
+            <th></th>
+            <th id="addNewPizzaButton">Add New Pizza</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>

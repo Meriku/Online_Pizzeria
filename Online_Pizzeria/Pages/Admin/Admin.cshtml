@@ -3,95 +3,19 @@
 @{
 }
 
-
-<div class="center supportBack controlCenter">
-    <h5 class="center controlCenterText" id="Center"> Control Center </h5>
+<div class="supportBack controlCenter">
+    <h5 class="controlCenterText unselectable" > Control Center </h5>
     <ul class="nav">
-        <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Pizzas">Pizzas</a></li>
-        <li><a class="unselectable" asp-page="/Admin/Admin" asp-route-view="Orders">Orders</a></li>
+        <li><a id="viewPizzasButton" class="unselectable">Pizzas</a></li>
+        <li><a id="viewOrdersButton" class="unselectable">Orders</a></li>
     </ul>
 </div>
+
 <br />
-<table class="table supportBack" style="width:900px;">
-    @{
-        if (Model.IsOrders)
-        {
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>PizzaId</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Ordered</th>
-                    <th>Delivered</th>
-                    <th></th>
-                </tr>
-            </thead>
 
-            <tbody class="tableMain">
-                @foreach (var row in Model.PizzaOrders)
-                {
-                    var rowId = $"ordersRow_" + row.Id;
-                    <tr id="@rowId">
-                        <th>@row.Id</th>
-
-                        @if (@row.PizzaId == null)
-                        {
-                            <th>Custom Pizza</th>
-                        }
-                        else
-                        {
-                            <th>@row.PizzaId</th>
-                        }
-                        <th>@row.Price</th>
-                        <th>@row.StatusCode</th>
-                        <th>@row.Ordered</th>
-                        <th>@row.Delivered</th>
-
-                        <th><p id="@row.Id" class="editOrderButton unselectable">Edit</p></th>
-                    </tr>
-                }
-            </tbody>
-        }
-        else
-        {
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>BasePrice</th>
-                    <th>Ingredients</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody class="tableMain">
-
-                @foreach (var row in Model.Pizzas)
-                {
-                    var ingr = row.Ingredients.Length > 50 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 50).LastIndexOf(",")) + " ..." : row.Ingredients;
-                    <tr>
-                        <th>@row.Id</th>
-                        <th>@row.Name</th>
-                        <th>@row.BasePrice</th>
-                        <th>@ingr</th>
-                        <th>
-                            <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
-                        </th>
-                    </tr>
-                }
-                <tr>
-                    <th></th>
-                    <th id="addNewPizzaButton">Add New Pizza</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tbody>
-
-        }
-    }
-
-</table>
+<div id="modalTable">
+    <img src="~/images/loading.gif" title="Loading" class="loadingImg">
+</div>
 
 <div id="modalCreatePizza" class="modal" tabindex="-1" role="dialog">
     <form method="post"></form>
@@ -149,7 +73,7 @@
                         </tr>
                         <tr>
                             <th><p class="editModal">Status: </p></th>
-                            <th class="editModal">@Html.DropDownListFor(m => m.NewOrderStatus, new SelectList(Model.Statuses))</th>
+                            <th class="editModal">@Html.DropDownList("modal_orderStatus", new SelectList(Model.Statuses))</th>
                         </tr>
                         <tr>
                             <th><p class="editModal">Ordered: </p></th>
@@ -170,6 +94,11 @@
 
 <script>
     window.onload = () => {
+        loadPizzas()
+
+        document.getElementById("viewPizzasButton").addEventListener("click", loadPizzas)
+        document.getElementById("viewOrdersButton").addEventListener("click", loadOrders)
+
         if (document.getElementById("addNewPizzaButton") !== null) {
             document.getElementById("addNewPizzaButton").addEventListener("click", showCreatePizza)
         }
@@ -177,6 +106,14 @@
         for (let button of document.getElementsByClassName("editOrderButton")) {
             button.addEventListener("click", () => { showEditOrder(button.id) })
         }
+    }
+
+    function loadPizzas() {
+        $('#modalTable').load('PartialViews/_PizzasTable')
+    }
+
+    function loadOrders(){
+        $('#modalTable').load('PartialViews/_OrdersTable')
     }
 
     function showCreatePizza() {
@@ -197,8 +134,10 @@
         document.getElementById('modal_orderId').innerText = row.cells[0].textContent
         document.getElementById('modal_pizzaName').innerText = row.cells[1].textContent
         document.getElementById('modal_price').innerText = row.cells[2].textContent
+        document.getElementById('modal_orderStatus').value = row.cells[3].textContent
         document.getElementById('modal_ordered').innerText = row.cells[4].textContent
         document.getElementById('modal_delivered').innerText = row.cells[5].textContent
+        
 
         $("#modalEditOrder").modal('show');
         document.getElementById("dismissEditOrder").addEventListener("click", hideEditOrder)
@@ -225,7 +164,7 @@
             headers: {
                 RequestName: "EditOrderRequest",
                 OrderId: document.getElementById('modal_orderId').innerText,
-                OrderStatus: document.getElementById('NewOrderStatus').value,
+                OrderStatus: document.getElementById('modal_orderStatus').value,
                 RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
             }
         })
