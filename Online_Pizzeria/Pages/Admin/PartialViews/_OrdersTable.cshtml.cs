@@ -10,12 +10,14 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
     public class _OrdersTableModel : PageModel
     {
         private readonly ApplicationDB _context;
+        private readonly Mapper<OrderDBModel, OrderAdminModel> _mapper;
 
-        public List<OrderDBModel> Orders { get; set; } = new List<OrderDBModel>();
+        public List<OrderAdminModel> Orders { get; set; } = new List<OrderAdminModel>();
 
         public _OrdersTableModel(ApplicationDB context)
         {
             _context = context;
+            _mapper = new Mapper<OrderDBModel, OrderAdminModel>();
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -33,9 +35,27 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
                 return Redirect("/Index");
             }
         }
-        private async Task<List<OrderDBModel>> GetOrders()
+        private async Task<List<OrderAdminModel>> GetOrders()
         {
-            return await _context.PizzaOrders.AsNoTracking().ToListAsync();
+            var OrdersDB = await _context.PizzaOrders.AsNoTracking().ToListAsync();
+            var OrdersAdmin = new List<OrderAdminModel>();
+
+            foreach (var orderDB in OrdersDB)
+            {
+                var orderAdmin = _mapper.Map(orderDB);
+                if (orderDB.PizzaId == null)
+                {
+                    orderAdmin.PizzaName = "Custom Pizza";
+                }
+                else
+                {
+                    var pizza = _context.Pizzas.FirstOrDefault(x => x.Id == orderDB.PizzaId);
+                    orderAdmin.PizzaName = pizza == null ? "Deleted Pizza" : pizza.Name;
+                }
+                OrdersAdmin.Add(orderAdmin);
+            }
+
+            return OrdersAdmin;
         }
     }
 }

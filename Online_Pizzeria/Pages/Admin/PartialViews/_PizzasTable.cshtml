@@ -15,7 +15,6 @@
     </thead>
 
     <tbody class="tableMain">
-
         @foreach (var row in Model.Pizzas)
         {
             var ingr = row.Ingredients.Length > 50 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 50).LastIndexOf(",")) + " ..." : row.Ingredients;
@@ -24,14 +23,12 @@
                 <th>@row.Name</th>
                 <th>@row.BasePrice</th>
                 <th>@ingr</th>
-                <th>
-                    <a class="unselectable deleteButton" asp-page="/Admin/Admin" asp-route-deletePizzaId="@row.Id">&times;</a>
-                </th>
+                <th><p id="@row.Id" class="editOrderButton unselectable">Edit</p></th>
             </tr>
         }
         <tr>
             <th></th>
-            <th id="addNewPizzaButton">Add New Pizza</th>
+            <th id="addNewPizzaButton" class="unselectable">Add New Pizza</th>
             <th></th>
             <th></th>
         </tr>

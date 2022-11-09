@@ -5,40 +5,30 @@
 }
 
 <table class="table supportBack" style="width:900px;">
-<thead>
-    <tr>
-        <th>Id</th>
-        <th>PizzaId</th>
-        <th>Price</th>
-        <th>Status</th>
-        <th>Ordered</th>
-        <th>Delivered</th>
-        <th></th>
-    </tr>
-</thead>
-
-<tbody class="tableMain">
-    @foreach (var row in Model.Orders)
-    {
-        var rowId = $"ordersRow_" + row.Id;
-        <tr id="@rowId">
-            <th>@row.Id</th>
-
-            @if (@row.PizzaId == null)
-            {
-                <th>Custom Pizza</th>
-            }
-            else
-            {
-                <th>@row.PizzaId</th>
-            }
-            <th>@row.Price</th>
-            <th>@row.StatusCode</th>
-            <th>@row.Ordered</th>
-            <th>@row.Delivered</th>
-
-            <th><p id="@row.Id" class="editOrderButton unselectable">Edit</p></th>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>PizzaId</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Ordered</th>
+            <th>Delivered</th>
+            <th></th>
         </tr>
-    }
-</tbody>
+    </thead>
+
+    <tbody class="tableMain">
+        @foreach (var row in Model.Orders)
+        {
+            <tr>
+                <th>@row.Id</th>
+                <th>@row.PizzaName</th>
+                <th>@row.Price</th>
+                <th>@row.StatusCode</th>
+                <th>@row.Ordered</th>
+                <th>@row.Delivered</th>
+                <th><p id="@row.Id" class="editOrderButton unselectable">Edit</p></th>
+            </tr>
+        }
+    </tbody>
 </table>

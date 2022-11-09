@@ -21,7 +21,7 @@ namespace Online_Pizzeria.Logic
             switch (typeof(TT).Name)
             {
                 case "OrderUserModel":
-                    if (input is OrderDBModel OrderDB)
+                    if (input is OrderDBModel OrderDBtoUser)
                     {
                         var result = new OrderUserModel()
                         {
@@ -30,7 +30,7 @@ namespace Online_Pizzeria.Logic
                                 Name = "",
                                 Ingredients = ""
                             },
-                            Price = OrderDB.Price
+                            Price = OrderDBtoUser.Price
                         };
                         return result as TT;
                     }
@@ -43,6 +43,23 @@ namespace Online_Pizzeria.Logic
                         {
                             Price = OrderUser.Price,
                             Ordered = OrderUser.Ordered
+                        };
+                        return result as TT;
+                    }
+                    break;
+
+                case "OrderAdminModel":
+                    if (input is OrderDBModel OrderDBtoAdmin)
+                    {
+                        var result = new OrderAdminModel()
+                        {
+                            Id = OrderDBtoAdmin.Id,
+                            PizzaName = "",
+                            Price = OrderDBtoAdmin.Price,
+                            StatusCode = OrderDBtoAdmin.StatusCode.ToString(),
+                            Ordered = OrderDBtoAdmin.Ordered.ToString("G"),
+                            Delivered = OrderDBtoAdmin.Ordered.ToString("G")
+
                         };
                         return result as TT;
                     }

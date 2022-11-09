@@ -17,8 +17,6 @@ namespace Online_Pizzeria.Pages.Admin
         public string[] Ingedients => Helper.GetPossibleIngredients();
         public string[] Statuses => Helper.GetPossibleStatuses();
 
-        public bool IsOrders { get; set; }
-
         public AdminModel(ApplicationDB context, IConfiguration configuration)
         {
             _context = context;
@@ -27,11 +25,9 @@ namespace Online_Pizzeria.Pages.Admin
 
         public IActionResult OnGet()
         {
-            IsOrders = this.Request.Query["view"].Equals("Orders");
             var deletePizzaId = this.Request.Query["deletePizzaId"];
 
-            var sessionId = this.Request.Cookies["sessionId"];
-            if (Sessions.CheckSessionId(sessionId))
+            if (Sessions.CheckSessionId(this.Request.Cookies["sessionId"]))
             {
                 if (Helper.ParseInt(deletePizzaId, out int Id)) { DeletePizza(Id); }
 
@@ -40,15 +36,13 @@ namespace Online_Pizzeria.Pages.Admin
             else
             {
                 this.Response.StatusCode = 401;
-                return Redirect("/Index");
+                return RedirectToPage("/Index");
             }
         }
 
         public void OnPost()
         {
-            var sessionId = this.Request.Cookies["sessionId"];
-            
-            if (Sessions.CheckSessionId(sessionId))
+            if (Sessions.CheckSessionId(this.Request.Cookies["sessionId"]))
             {
                 var requestName = this.Request.Headers["RequestName"][0];
 

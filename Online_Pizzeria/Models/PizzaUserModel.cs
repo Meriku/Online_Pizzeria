@@ -3,6 +3,7 @@
     public class PizzaUserModel
     {
         public string Name { get; set; }
-        public Ingredient[] Ingredients { get; set; }
+        public decimal BasePrice { get; set; }
+        public string Ingredients { get; set; }
     }
 }
