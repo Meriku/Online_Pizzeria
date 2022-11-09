@@ -54,6 +54,10 @@ namespace Online_Pizzeria.Pages.Admin
                 {
                     CreatePizza();
                 }
+                if (requestName.Equals("EditPizzaRequest"))
+                {
+                    EditPizza();
+                }
             }
             else
             {
@@ -62,7 +66,7 @@ namespace Online_Pizzeria.Pages.Admin
             }        
         }
 
-        private IActionResult CreatePizza()
+        private void CreatePizza()
         {
             var createPizzaRequest = new CreatePizzaRequest()
             {
@@ -80,11 +84,34 @@ namespace Online_Pizzeria.Pages.Admin
 
             _context.Pizzas.Add(pizza);
             _context.SaveChanges();
-
-            return Page();
         }
+        private void EditPizza()
+        {
+            var editPizzaRequest = new EditPizzaRequest()
+            {
+                PizzaId = this.Request.Headers["PizzaId"][0],
+                Name = this.Request.Headers["Name"][0],
+                BasePrice = this.Request.Headers["BasePrice"][0],
+                Ingredients = this.Request.Headers["Ingredients"][0]
+            };
 
-        private IActionResult EditOrder()
+            if (Helper.ParseInt(editPizzaRequest.PizzaId, out int id))
+            {
+                var pizza = _context.Pizzas.FirstOrDefault(p => p.Id == id);
+                if (pizza == null)
+                {
+                    throw new ArgumentNullException("Pizza was null while editing");
+                }
+
+                //TODO: refactoring
+                pizza.Name = String.IsNullOrWhiteSpace(editPizzaRequest.Name) ? pizza.Name : editPizzaRequest.Name;
+                pizza.BasePrice = Helper.ParseDecimal(editPizzaRequest.BasePrice, out decimal price) ? price : pizza.BasePrice;
+                pizza.Ingredients = String.IsNullOrWhiteSpace(editPizzaRequest.Ingredients) ? pizza.Ingredients : editPizzaRequest.Ingredients;
+
+                _context.SaveChanges();
+            }
+        }
+        private void EditOrder()
         {
             var editOrderRequest = new EditOrderRequest()
             {
@@ -108,7 +135,6 @@ namespace Online_Pizzeria.Pages.Admin
                 }
                 _context.SaveChanges();
             }
-            return RedirectToPage("/Admin/Admin");
         }
 
         private void DeletePizza(int? id)

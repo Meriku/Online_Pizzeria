@@ -204,11 +204,14 @@ ul.nav > li > a {
     padding: 0px 0px 0px 0px;
 }
 
-.ingredientCheckbox {
+.ingredientCheckboxCreate {
     margin: auto;
     text-align: center;
 }
-
+.ingredientCheckboxEdit {
+    margin: auto;
+    text-align: center;
+}
 .loadingImg {
     display: block;
     margin-left: auto;

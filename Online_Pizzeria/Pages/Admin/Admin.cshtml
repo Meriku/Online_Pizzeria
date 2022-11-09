@@ -35,12 +35,42 @@
                 @{
                     foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
                     {
-                        <input type="checkbox" class="ingredientCheckbox" placeholder="@IngredientName" /> @IngredientName
-                        <br />
+                                            <input type="checkbox" class="ingredientCheckboxCreate" placeholder="@IngredientName" /> @IngredientName
+                                            <br />
                     }
                 }
                 <br />
                 <button id="createPizza_Button" class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditPizza" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pizza Details Form</h5>
+                <button type="button" id="dismissEditPizza" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p id="editPizza_Id" hidden=true></p>
+                <input id="editPizza_name" type="text" placeholder="Enter Pizza Name" class="center" />
+                <br />
+                <input id="editPizza_price" type="text" placeholder="Enter Pizza Price" class="center" />
+                <br />
+                @{
+                    foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
+                    {
+                                            <input type="checkbox" class="ingredientCheckboxEdit" placeholder="@IngredientName" /> @IngredientName
+                                            <br />
+                    }
+                }
+                <br />
+                <button id="editPizza_Button" class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Save</button>
             </div>
         </div>
     </div>
@@ -92,6 +122,7 @@
     </div>
 </div>
 
+
 <script>
     window.onload = () => {
         loadPizzas()
@@ -103,7 +134,6 @@
     function loadPizzas() {
         $('#modalTable').load('PartialViews/_PizzasTable', bindPizzasTableElemets)
     }
-
     function loadOrders() {
         $('#modalTable').load('PartialViews/_OrdersTable', bindOrdersTableElemets)
     }
@@ -118,7 +148,7 @@
         document.getElementById("addNewPizzaButton").addEventListener("click", showCreatePizza)
 
         for (let button of document.getElementsByClassName("editOrderButton")) {
-            button.addEventListener("click", () => { showEditOrder(button.id) })
+            button.addEventListener("click", () => { showEditPizza(button.id) })
         }
     }
     function showEditOrder(orderId) {
@@ -138,7 +168,7 @@
         document.getElementById('editOrderButton').addEventListener("click", sendEditOrderRequest)
     }
     function hideEditOrder() {
-        $("#modalEditOrder").modal('hide');      
+        $("#modalEditOrder").modal('hide');
     }
     function sendEditOrderRequest() {
         $.ajax({
@@ -156,7 +186,7 @@
             complete: function() {
                 loadOrders();
             }
-        })        
+        })
     }
 
 
@@ -166,18 +196,25 @@
 
         document.getElementById("dismissCreatePizza").addEventListener("click", hideCreatePizza)
         document.getElementById('createPizza_Button').addEventListener("click", sendCreatePizzaRequest)
-        for (let checkbox of document.getElementsByClassName("ingredientCheckbox")) {
-            checkbox.addEventListener("click", ingredientsToString)
-        }
     }
     function hideCreatePizza() {
         $("#modalCreatePizza").modal('hide');
     }
 
-
-    function ingredientsToString() {
+    
+    function ingredientsCreateToString() {
         let ingredients = []
-        for (let checkbox of document.getElementsByClassName("ingredientCheckbox")) {
+        for (let checkbox of document.getElementsByClassName("ingredientCheckboxCreate")) {
+            if (checkbox.checked) {
+                ingredients.push(checkbox.placeholder)
+            }
+        }
+        return ingredients.join(", ")
+    }
+
+    function ingredientsEditToString() {
+        let ingredients = []
+        for (let checkbox of document.getElementsByClassName("ingredientCheckboxEdit")) {
             if (checkbox.checked) {
                 ingredients.push(checkbox.placeholder)
             }
@@ -193,11 +230,69 @@
                 RequestName: "CreatePizzaRequest",
                 Name: document.getElementById('createPizza_name').value,
                 BasePrice: document.getElementById('createPizza_price').value,
-                Ingredients: ingredientsToString(),
+                Ingredients: ingredientsCreateToString(),
                 RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function() {
+                hideCreatePizza()
+            },
+            complete: function() {
+                loadPizzas();
             }
         })
-        hideCreatePizza()
+    }
+
+    function showEditPizza(orderId) {
+        let rows = document.getElementsByClassName('tableMain')[0].getElementsByTagName("tr")
+        for (let row of rows) {
+            if (row.cells[0].textContent === orderId) {
+                
+                document.getElementById('editPizza_Id').innerText = row.cells[0].textContent
+                document.getElementById('editPizza_name').placeholder = row.cells[1].textContent
+                document.getElementById('editPizza_price').placeholder = row.cells[2].textContent
+                document.getElementById('editPizza_name').value = row.cells[1].textContent
+                document.getElementById('editPizza_price').value = row.cells[2].textContent
+
+                let ingredients = row.cells[3].textContent
+                for (let checkbox of document.getElementsByClassName("ingredientCheckboxEdit")) {
+                    if (ingredients.includes(checkbox.placeholder)) {
+                        checkbox.checked = true
+                    }
+                    else {
+                        checkbox.checked = false
+                    }
+                }
+            }
+        }
+
+        $("#modalEditPizza").modal('show');
+        document.getElementById("dismissEditPizza").addEventListener("click", hideEditPizza)
+        document.getElementById('editPizza_Button').addEventListener("click", sendEditPizzaRequest)
+    }
+
+    function hideEditPizza() {
+        $("#modalEditPizza").modal('hide');
+    }
+
+    function sendEditPizzaRequest() {
+        $.ajax({
+            type: 'POST',
+            url: "Admin/",
+            headers: {
+                RequestName: "EditPizzaRequest",
+                PizzaId: document.getElementById('editPizza_Id').innerText,
+                Name: document.getElementById('editPizza_name').value,
+                BasePrice: document.getElementById('editPizza_price').value,
+                Ingredients: ingredientsEditToString(),
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function() {
+                hideEditPizza()
+            },
+            complete: function() {
+                loadPizzas();
+            }
+        })
     }
 
 </script>
