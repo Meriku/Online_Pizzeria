@@ -11,6 +11,7 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
     {
         private readonly ApplicationDB _context;
 
+        public string[] Ingedients => Helper.GetPossibleIngredients();
         public List<PizzaDBModel> Pizzas { get; set; } = new List<PizzaDBModel>();
 
         public _PizzasTableModel(ApplicationDB context)

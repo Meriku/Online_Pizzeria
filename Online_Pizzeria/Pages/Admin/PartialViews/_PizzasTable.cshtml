@@ -17,7 +17,7 @@
     <tbody class="tableMain">
         @foreach (var row in Model.Pizzas)
         {
-            var ingr = row.Ingredients.Length > 50 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 50).LastIndexOf(",")) + " ..." : row.Ingredients;
+            var ingr = row.Ingredients.Length > 40 ? row.Ingredients.Substring(0, row.Ingredients.Substring(0, 40).LastIndexOf(",")) + " ..." : row.Ingredients;
             <tr>
                 <th>@row.Id</th>
                 <th>@row.Name</th>
@@ -34,3 +34,73 @@
         </tr>
     </tbody>
 </table>
+
+
+<div id="modalCreatePizza" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title center">Add Pizza</h5>
+                <button type="button" id="dismissCreatePizza" class="close" aria-label="Close">
+                    <span aria-hidden="true" class="unselectable closeSymbol">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <input id="createPizza_name" type="text" placeholder="Enter Pizza Name" class="center inputPizza" />
+                <br />
+                <input id="createPizza_price" type="text" placeholder="Enter Pizza Price" class="center inputPizza" style="margin: 0px 0px 20px 0px"  />
+                <br />
+                @{
+                    foreach (var IngredientName in Model.Ingedients)
+                    {
+                        <div class="row" style="margin: 0px 0px 0px 170px">
+                            <div class="col-2"><input type="checkbox" class="ingredientCheckboxCreate" placeholder="@IngredientName" /></div>
+                            <div class="col-5"><p style="text-align:left">@IngredientName</p></div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="modal-footer">
+                <button id="createPizza_Button" class="btn btn-primary mt-1 centerButton" style="margin: auto;  width: 100px;" type="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditPizza" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title center">Edit Pizza</h5>
+                <button type="button" id="dismissEditPizza" class="close" aria-label="Close">
+                    <span aria-hidden="true" class="unselectable closeSymbol">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p id="editPizza_Id" hidden=true></p>
+                <input id="editPizza_name" type="text" placeholder="Enter Pizza Name" class="center inputPizza" />
+                <br />
+                <input id="editPizza_price" type="text" placeholder="Enter Pizza Price" class="center inputPizza" style="margin: 0px 0px 20px 0px" />
+                <br />
+                @{
+                    foreach (var IngredientName in Model.Ingedients)
+                    {
+                        <div class="row" style="margin: 0px 0px 0px 170px">
+                            <div class="col-2"><input type="checkbox" class="ingredientCheckboxEdit" placeholder="@IngredientName" /></div>
+                            <div class="col-5"><p style="text-align:left">@IngredientName</p></div>
+                        </div>
+                    }
+                }
+
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-4"> <button id="editPizza_Button" class="btn btn-primary editPizzaButton" type="submit">Save</button></div>
+                    <div class="col-5"> <button id="deletePizza_Button" class="btn btn-primary editPizzaButton" type="submit">Delete</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

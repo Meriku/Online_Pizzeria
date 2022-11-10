@@ -205,12 +205,14 @@ ul.nav > li > a {
 }
 
 .ingredientCheckboxCreate {
-    margin: auto;
-    text-align: center;
+    margin: 5px 0px 5px 0px;
+    height: 18px;
+    width: 18px;
 }
 .ingredientCheckboxEdit {
-    margin: auto;
-    text-align: center;
+    margin: 5px 0px 5px 0px;
+    height: 18px;
+    width: 18px;
 }
 .loadingImg {
     display: block;
@@ -218,4 +220,34 @@ ul.nav > li > a {
     margin-right: auto;
     padding: 50px 0px 0px 0px;
     height: 200px
+}
+
+.inputPizza {
+    color: black;
+    margin: 5px 0px 5px 0px;
+    padding: 2px 0px 2px 0px;
+    border-radius: 0.3rem;
+    border-color: darkgray;
+}
+
+.editPizzaButton {
+    margin: 0px 50px 0px 0px;
+    width: 100px;
+}
+
+.close {
+    padding: 0px 0px 20px 0px;
+    height: 20px;
+    width: 20px;
+    border-radius: 0.3rem;
+    border-color: darkgray;
+}
+.closeSymbol {
+    padding: 0px 0px 0px 0px;
+    opacity: 0.9;
+}
+
+.closeSymbol:hover {
+    opacity: 1;
+    color: darkred;
 }

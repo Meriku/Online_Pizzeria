@@ -15,5 +15,12 @@
     {
         public string PizzaId { get; set; }
     }
+
+    public class DeletePizzaRequest 
+    {
+        public string PizzaId { get; set; }
+    }
+
+
 }
 

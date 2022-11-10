@@ -12,6 +12,7 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
         private readonly ApplicationDB _context;
         private readonly Mapper<OrderDBModel, OrderAdminModel> _mapper;
 
+        public string[] Statuses => Helper.GetPossibleStatuses();
         public List<OrderAdminModel> Orders { get; set; } = new List<OrderAdminModel>();
 
         public _OrdersTableModel(ApplicationDB context)

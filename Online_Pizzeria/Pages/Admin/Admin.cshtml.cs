@@ -14,9 +14,6 @@ namespace Online_Pizzeria.Pages.Admin
         private readonly ApplicationDB _context;
         private readonly IConfiguration _configuration;
         
-        public string[] Ingedients => Helper.GetPossibleIngredients();
-        public string[] Statuses => Helper.GetPossibleStatuses();
-
         public AdminModel(ApplicationDB context, IConfiguration configuration)
         {
             _context = context;
@@ -25,12 +22,8 @@ namespace Online_Pizzeria.Pages.Admin
 
         public IActionResult OnGet()
         {
-            var deletePizzaId = this.Request.Query["deletePizzaId"];
-
             if (Sessions.CheckSessionId(this.Request.Cookies["sessionId"]))
             {
-                if (Helper.ParseInt(deletePizzaId, out int Id)) { DeletePizza(Id); }
-
                 return Page();
             }
             else
@@ -44,19 +37,20 @@ namespace Online_Pizzeria.Pages.Admin
         {
             if (Sessions.CheckSessionId(this.Request.Cookies["sessionId"]))
             {
-                var requestName = this.Request.Headers["RequestName"][0];
-
-                if (requestName.Equals("EditOrderRequest"))
+                switch (this.Request.Headers["RequestName"][0])
                 {
-                    EditOrder();
-                }
-                if (requestName.Equals("CreatePizzaRequest"))
-                {
-                    CreatePizza();
-                }
-                if (requestName.Equals("EditPizzaRequest"))
-                {
-                    EditPizza();
+                    case "EditOrderRequest":
+                        EditOrder();
+                        break;
+                    case "CreatePizzaRequest":
+                        CreatePizza();
+                        break;
+                    case "EditPizzaRequest":
+                        EditPizza();
+                        break;
+                    case "DeletePizzaRequest":
+                        DeletePizza();
+                        break;
                 }
             }
             else
@@ -137,18 +131,17 @@ namespace Online_Pizzeria.Pages.Admin
             }
         }
 
-        private void DeletePizza(int? id)
+        private void DeletePizza()
         {
-            if (id == null) { throw new ArgumentNullException("Pizza id was null"); }
-            try
+            var deletePizzaRequest = new DeletePizzaRequest()
             {
-                _context.Pizzas.Remove(new PizzaDBModel() { Id = (int)id });
-                _context.SaveChanges();
+                PizzaId = this.Request.Headers["PizzaId"][0]
+            };
 
-            }
-            catch(Exception e)
+            if (Helper.ParseInt(deletePizzaRequest.PizzaId, out int id))
             {
-                Console.WriteLine(e.Message);
+                _context.Pizzas.Remove(new PizzaDBModel() { Id = id });
+                _context.SaveChanges();
             }
         }
 

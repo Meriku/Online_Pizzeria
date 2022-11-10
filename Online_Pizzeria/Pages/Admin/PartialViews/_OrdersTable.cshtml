@@ -32,3 +32,49 @@
         }
     </tbody>
 </table>
+
+<div id="modalEditOrder" class="modal" tabindex="-1" role="dialog">
+    <form method="post"></form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pizza Details Form</h5>
+                <button type="button" id="dismissEditOrder" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table supportBack">
+                    <tbody class="tableMain">
+                        <tr>
+                            <th><p class="editModal">Order Id: </p></th>
+                            <th><p class="editModal" id="modal_orderId"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Pizza Name: </p></th>
+                            <th><p class="editModal" id="modal_pizzaName"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Price: </p></th>
+                            <th><p class="editModal" id="modal_price"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Status: </p></th>
+                            <th class="editModal">@Html.DropDownList("modal_orderStatus", new SelectList(Model.Statuses))</th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Ordered: </p></th>
+                            <th><p class="editModal" id="modal_ordered"></p></th>
+                        </tr>
+                        <tr>
+                            <th><p class="editModal">Delivered: </p></th>
+                            <th><p class="editModal" id="modal_delivered"></p></th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <button id="editOrderButton" class="btn btn-primary mt-1 centerButton" style="margin: auto;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
