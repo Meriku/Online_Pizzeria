@@ -97,7 +97,6 @@ namespace Online_Pizzeria.Pages.Admin
                     throw new ArgumentNullException("Pizza was null while editing");
                 }
 
-                //TODO: refactoring
                 pizza.Name = String.IsNullOrWhiteSpace(editPizzaRequest.Name) ? pizza.Name : editPizzaRequest.Name;
                 pizza.BasePrice = Helper.ParseDecimal(editPizzaRequest.BasePrice, out decimal price) ? price : pizza.BasePrice;
                 pizza.Ingredients = String.IsNullOrWhiteSpace(editPizzaRequest.Ingredients) ? pizza.Ingredients : editPizzaRequest.Ingredients;
@@ -105,6 +104,7 @@ namespace Online_Pizzeria.Pages.Admin
                 _context.SaveChanges();
             }
         }
+
         private void EditOrder()
         {
             var editOrderRequest = new EditOrderRequest()
@@ -140,8 +140,23 @@ namespace Online_Pizzeria.Pages.Admin
 
             if (Helper.ParseInt(deletePizzaRequest.PizzaId, out int id))
             {
-                _context.Pizzas.Remove(new PizzaDBModel() { Id = id });
+
+                var pizzaToRemove = _context.Pizzas.FirstOrDefault(p => p.Id == id);
+
+                if (pizzaToRemove == null)
+                {
+                    throw new ArgumentNullException("Pizza was null while removing");
+                }
+
+                _context.Pizzas.Remove(pizzaToRemove);
                 _context.SaveChanges();
+
+                var imgsrc = $"wwwroot/images/AllPizzas/{pizzaToRemove.Name}.png";
+                if (System.IO.File.Exists(imgsrc))
+                {
+                    System.IO.File.Delete(imgsrc);
+                    Console.WriteLine($"Default image was deleated for {pizzaToRemove.Name}::LOG {DateTime.Now:G}");
+                }
             }
         }
 
