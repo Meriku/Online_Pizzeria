@@ -9,9 +9,10 @@ namespace Online_Pizzeria.Pages.Forms
 {
     public class PizzaModel : PageModel
     {
-        public string[] pizzasNames;
+        public List<PizzaUserModel> pizzasUser;
 
         private readonly ApplicationDB _context;
+        private readonly Mapper<PizzaDBModel, PizzaUserModel> _mapper = new();
 
         public PizzaModel(ApplicationDB context)
         {
@@ -20,21 +21,23 @@ namespace Online_Pizzeria.Pages.Forms
 
         public void OnGet()
         {
-            pizzasNames = _context.Pizzas.Select(x => x.Name).ToArray();
-            CreateImages();
-        }
+            var pizzasDB = _context.Pizzas.ToArray();
+            pizzasUser = new List<PizzaUserModel>();
 
-        private void CreateImages()
-        {
-            foreach (var pizza in pizzasNames)
+            if (pizzasDB == null)
             {
-                var imgsrc = $"wwwroot/images/AllPizzas/{pizza}.png";
-                if (!System.IO.File.Exists(imgsrc))
-                {
-                    System.IO.File.Copy(@"wwwroot/images/AllPizzas/Create.png", imgsrc);
-                    Console.WriteLine($"Default image was created for {pizza}::LOG {DateTime.Now:G}");
-                }
+                throw new ArgumentNullException();
+            }
+
+            foreach (var pizza in pizzasDB)
+            {
+                pizzasUser.Add(_mapper.Map(pizza));
             }
         }
+
+
+
+
+
     }
 }

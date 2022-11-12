@@ -64,6 +64,22 @@ namespace Online_Pizzeria.Logic
                         return result as TT;
                     }
                     break;
+
+                case "PizzaUserModel":
+                    if (input is PizzaDBModel PizzaDBtoUser)
+                    {
+                        var imgsrc = $"wwwroot/images/AllPizzas/{PizzaDBtoUser.Name}.png";
+
+                        var result = new PizzaUserModel()
+                        {
+                            Name = PizzaDBtoUser.Name,
+                            ImageName = File.Exists(imgsrc) ? PizzaDBtoUser.Name : "Create",
+                            BasePrice = PizzaDBtoUser.BasePrice,
+                            Ingredients = PizzaDBtoUser.Ingredients
+                        };
+                        return result as TT;
+                    }
+                    break;
             }
 
             return default;

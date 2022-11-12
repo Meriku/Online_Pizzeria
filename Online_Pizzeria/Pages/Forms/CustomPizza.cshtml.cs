@@ -14,7 +14,7 @@ namespace Online_Pizzeria.Pages.Forms
 
         private readonly ApplicationDB _context;
         private readonly IConfiguration _configuration;
-        private readonly Mapper<OrderUserModel, OrderDBModel> _mapper;
+        private readonly Mapper<OrderUserModel, OrderDBModel> _mapper = new();
         private readonly decimal _defaultPrice;
         private readonly decimal _defaultIngredientPrice;
 
@@ -22,7 +22,6 @@ namespace Online_Pizzeria.Pages.Forms
         {
             _configuration = configuration;
             _context = context;
-            _mapper = new Mapper<OrderUserModel, OrderDBModel>();
             _defaultPrice = GetDefaultPrice();
             _defaultIngredientPrice = GetDefaultIngredientPrice();
         }

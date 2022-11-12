@@ -1,7 +1,7 @@
 
 {
     "region" : "eu-central-1",
-    "configuration" : "Debug",
+    "configuration" : "Release",
     "framework"     : "net6.0",
     "self-contained" : false,
     "application"    : "OnlinePizzeria",
@@ -10,7 +10,7 @@
     "iis-website"    : "Default Web Site",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0c49aa1d8162d4017\";\"aws:ec2:vpc,Subnets\"=\"subnet-02c974c51d19868fd\"",
+    "additional-options"   : "",
     "solution-stack"       : "64bit Windows Server Core 2019 v2.10.5 running IIS 10.0",
     "environment-type"     : "SingleInstance",
     "cname"                : "onlinepizzeria-test",

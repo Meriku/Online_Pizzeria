@@ -10,13 +10,12 @@ namespace Online_Pizzeria.Pages.Checkout
     public class CheckoutModel : PageModel
     {     
         private readonly ApplicationDB _context;
-        private Mapper<OrderUserModel, OrderDBModel> _mapper;
+        private Mapper<OrderUserModel, OrderDBModel> _mapper = new();
         public OrderDBModel UserOrder { get; set; }
 
         public CheckoutModel(ApplicationDB context)
         {
             _context = context;
-            _mapper = new Mapper<OrderUserModel, OrderDBModel>();
         }
 
         public void OnGet()

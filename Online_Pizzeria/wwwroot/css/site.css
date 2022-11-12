@@ -69,15 +69,6 @@ body {
     width: 300px
 }
 
-.pizzaImg {
-    width:300px;
-    padding: 20px;
-    opacity: 0.9
-}
-.pizzaImg:hover {
-    transform: scale(1.1);
-    opacity: 1
-}
 
 .unselectable {
     -webkit-touch-callout: none; 
@@ -250,4 +241,51 @@ ul.nav > li > a {
 .closeSymbol:hover {
     opacity: 1;
     color: darkred;
+}
+
+.tryNowButton {
+    padding: 3px 0px 0px 0px;
+    margin: auto;
+    display: block;
+    width: 90px;
+    height: 35px;
+    border-radius: 0.9rem;
+}
+
+.tryNowButton:hover {
+    background-color:whitesmoke;
+}
+
+.pizzaMainText {
+    width: 500px;
+    margin: 10px auto 20px auto;
+    padding: 10px 0px 10px 0px;
+    text-align: center;
+    font-weight: normal;
+    background-color: white;
+    border-radius: 0.9rem;
+}
+
+.pizzaName {
+    padding: 12px 0px 0px 0px;
+    display: block;
+    text-align: center;
+}
+
+.pizzaImg {
+    width: 300px;
+    padding: 10px 15px 18px 15px;
+    opacity: 0.9
+}
+
+.pizzaImg:hover {
+    transform: scale(1.1);
+    opacity: 1;
+    cursor: pointer;
+}
+
+.pizzaBox {
+    margin: 10px 0px 10px 0px;
+    background-color: white;
+    border-radius: 5rem;
 }

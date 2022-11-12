@@ -10,7 +10,7 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
     public class _OrdersTableModel : PageModel
     {
         private readonly ApplicationDB _context;
-        private readonly Mapper<OrderDBModel, OrderAdminModel> _mapper;
+        private readonly Mapper<OrderDBModel, OrderAdminModel> _mapper = new();
 
         public string[] Statuses => Helper.GetPossibleStatuses();
         public List<OrderAdminModel> Orders { get; set; } = new List<OrderAdminModel>();
@@ -18,7 +18,6 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
         public _OrdersTableModel(ApplicationDB context)
         {
             _context = context;
-            _mapper = new Mapper<OrderDBModel, OrderAdminModel>();
         }
 
         public async Task<IActionResult> OnGetAsync()

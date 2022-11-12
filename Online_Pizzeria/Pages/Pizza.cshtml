@@ -3,31 +3,53 @@
 @{
 }
 
-<h1 class="display-4 text-capitalize text-black">Great selection of Pizzas</h1>
+<h1 class="pizzaMainText">Great selection of Pizzas</h1>
 
-<div class="container"> 
+<div class="container">
     <div class="row">
-
-        <div class="col-4 align-items-center">
-            <div class="align-items-center supportBack">
-                <h5 class="center m-auto">Create your own Pizza</h5>
-                <img src="~/images/AllPizzas/Create.png" class="pizzaImg" />   
-                <a class="btn center centerButton m-auto" asp-page="Forms/CustomPizza">Try Now</a>
+        <div class="col-3 align-items-center">
+            <div class="pizzaBox">
+                <h5 class="pizzaName unselectable">My own Pizza</h5>
+                <img src="~/images/AllPizzas/Create.png" class="pizzaImg" title="CustomPizza" />
+                <a class="btn tryNowButton" id="CustomPizza">Try Now</a>
+                <br>
             </div>
         </div>
-
         @{
-            foreach (var name in Model.pizzasNames)
-            {            
-                var imgsrc = $"/images/AllPizzas/{@name}.png";
-                <div class="col-4 align-items-center">
-                    <div class="align-items-center supportBack">
-                        <h5 class="center m-auto">@name</h5>
-                        <img src=@imgsrc class="pizzaImg" />   
-                        <a class="btn center centerButton m-auto" asp-page="Checkout/Checkout" asp-route-PizzaName="@name">Try Now</a>
-                    </div>
-                </div>
+            foreach (var pizza in Model.pizzasUser)
+            {
+                var imgsrc = $"/images/AllPizzas/{@pizza.ImageName}.png";
+                        <div class="col-3 align-items-center">
+                            <div class="pizzaBox">
+                                <h5 class="pizzaName unselectable">@pizza.Name</h5>
+                                <img src=@imgsrc class="pizzaImg" title="@pizza.Name" />
+                                <a class="btn tryNowButton" id="@pizza.Name">Try Now</a>
+                                <br>
+                            </div>
+                        </div>
             }
         }
     </div>
 </div>
+
+<script>
+
+    window.onload = () => {
+        for (let element of document.getElementsByClassName("pizzaImg")) {
+            element.addEventListener("click", () => { redirectToCheckOut(element.title) })
+        }
+        for (let element of document.getElementsByClassName("tryNowButton")) {
+            element.addEventListener("click", () => { redirectToCheckOut(element.id) })
+        }
+    }
+
+    function redirectToCheckOut(pizzaName) {
+        if (pizzaName === "CustomPizza") {
+            $(window).attr('location','Forms/CustomPizza')
+        }
+        else {
+            $(window).attr('location','Checkout/Checkout')
+        }
+    }
+
+</script>
