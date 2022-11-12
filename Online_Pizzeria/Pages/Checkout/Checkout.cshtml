@@ -2,21 +2,50 @@
 @model Online_Pizzeria.Pages.Checkout.CheckoutModel
 
 @{
-    var imagePath = "~/images/AllPizzas/Create.png"; //+ (@Model.UserOrder.UserPizza.Name + ".png");
+    var imagePath = "/images/AllPizzas/" + @Model.UserOrder.UserPizza.ImageName + ".png";
 }
 
-    <div class="supportBack"> 
-        <h5 class="center">Please, check your Order</h5>
-        <br />
-        <p class="center m-0">Order Number: @Model.UserOrder.Id</p>
-        <p class="center m-0">Order Price: @Model.UserOrder.Price</p>      
-    </div>
-    <div  class="center">  
-        <img src="@imagePath" class="finalImage m-2" asp-append-version="true">
-        <br />
-        <a class="btn btn-primary mt-4 w-25" asp-area="" asp-page="/Checkout/ThankYou">Everything is correct</a> 
-    </div>
+<div class="supportBack">
+    <h5 class="center">Please, check your Order</h5>
+    <br />
+    <p class="center m-0">Pizza Name: @Model.UserOrder.UserPizza.Name</p>
+    <p class="center m-0">Pizza Price: @Model.UserOrder.Price</p>
+    <p class="center m-0">Pizza Ingredients: @Model.UserOrder.UserPizza.Ingredients</p>
+</div>
+<div class="center">
+    <img src="@imagePath" class="finalImage m-2">
+    <br />
+    <a id="approveButton" class="btn btn-primary mt-4 w-10">Checkout</a>
+    <br />
+    <a id="cancelButton" class="btn btn-primary mt-4 w-10">Cancel</a>
+</div>
 
 
+<script>
 
+
+    window.onload = () => {
+        document.getElementById("approveButton").addEventListener("click", sendNewOrder)
+        document.getElementById("cancelButton").addEventListener("click", sendUserBack)
+    }
+
+    function sendNewOrder() {
+        $.ajax({
+            type: 'POST',
+            url: "Checkout/Checkout",
+            headers: {
+                RequestName: "SendNewOrderRequest",
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function() {
+                $(window).attr('location', `Checkout\ThankYou`)
+            }
+        })
+    }
+
+
+    function sendUserBack() {
+        $(window).attr('location', `/Pizza`)
+    }
+</script>
 

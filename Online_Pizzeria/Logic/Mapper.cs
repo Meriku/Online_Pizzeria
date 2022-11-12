@@ -23,9 +23,10 @@ namespace Online_Pizzeria.Logic
                 case "OrderUserModel":
                     if (input is OrderDBModel OrderDBtoUser)
                     {
+                        throw new NotImplementedException();
                         var result = new OrderUserModel()
                         {
-                            UserPizza = new PizzaDBModel()
+                            UserPizza = new PizzaUserModel()
                             {
                                 Name = "",
                                 Ingredients = ""

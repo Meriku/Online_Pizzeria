@@ -19,14 +19,14 @@
             foreach (var pizza in Model.pizzasUser)
             {
                 var imgsrc = $"/images/AllPizzas/{@pizza.ImageName}.png";
-                        <div class="col-3 align-items-center">
-                            <div class="pizzaBox">
-                                <h5 class="pizzaName unselectable">@pizza.Name</h5>
-                                <img src=@imgsrc class="pizzaImg" title="@pizza.Name" />
-                                <a class="btn tryNowButton" id="@pizza.Name">Try Now</a>
-                                <br>
+                            <div class="col-3 align-items-center">
+                                <div class="pizzaBox">
+                                    <h5 class="pizzaName unselectable">@pizza.Name</h5>
+                                    <img src=@imgsrc class="pizzaImg" title="@pizza.Name" />
+                                    <a class="btn tryNowButton" id="@pizza.Name">Try Now</a>
+                                    <br>
+                                </div>
                             </div>
-                        </div>
             }
         }
     </div>
@@ -45,10 +45,10 @@
 
     function redirectToCheckOut(pizzaName) {
         if (pizzaName === "CustomPizza") {
-            $(window).attr('location','Forms/CustomPizza')
+            $(window).attr('location','Forms/CustomPizza')              
         }
         else {
-            $(window).attr('location','Checkout/Checkout')
+            $(window).attr('location',`Checkout/Checkout?pizzaName=${pizzaName}`)
         }
     }
 

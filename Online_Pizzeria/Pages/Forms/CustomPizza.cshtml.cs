@@ -26,8 +26,9 @@ namespace Online_Pizzeria.Pages.Forms
             _defaultIngredientPrice = GetDefaultIngredientPrice();
         }
 
-        public void OnGet()
-        {           
+        public IActionResult OnGet()
+        {
+            return Page();
         }
 
         public IActionResult OnPost()
