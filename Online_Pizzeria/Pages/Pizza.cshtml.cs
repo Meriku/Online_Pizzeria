@@ -9,21 +9,24 @@ namespace Online_Pizzeria.Pages.Forms
 {
     public class PizzaModel : PageModel
     {
-        public string[] PizzasNames;
+        public string[] pizzasNames;
 
         private readonly ApplicationDB _context;
-        private readonly Mapper<OrderUserModel, OrderDBModel> _mapper;
 
         public PizzaModel(ApplicationDB context)
         {
             _context = context;
-            _mapper = new Mapper<OrderUserModel, OrderDBModel>();
         }
 
         public void OnGet()
         {
-            PizzasNames = _context.Pizzas.Select(x => x.Name).ToArray();
-            foreach (var pizza in PizzasNames)
+            pizzasNames = _context.Pizzas.Select(x => x.Name).ToArray();
+            CreateImages();
+        }
+
+        private void CreateImages()
+        {
+            foreach (var pizza in pizzasNames)
             {
                 var imgsrc = $"wwwroot/images/AllPizzas/{pizza}.png";
                 if (!System.IO.File.Exists(imgsrc))

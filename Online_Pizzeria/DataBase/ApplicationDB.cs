@@ -11,8 +11,13 @@ namespace Online_Pizzeria.DataBase
 
         public ApplicationDB(DbContextOptions<ApplicationDB> options) : base(options)
         {
-
+            
         }
+
+        //public ApplicationDB(DbContextOptions<ApplicationDB> options) : base(options)
+        //{
+        //    if (Database.EnsureCreated()) Database.Migrate();
+        //}
 
     }
 }
