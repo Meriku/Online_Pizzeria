@@ -5,25 +5,25 @@
     var imagePath = "/images/AllPizzas/" + @Model.UserOrder.UserPizza.ImageName + ".png";
 }
 
-<div class="supportBack">
+<div class="boxCheckout">
     <h5 class="center">Please, check your Order</h5>
     <br />
     <p class="center m-0">Pizza Name: @Model.UserOrder.UserPizza.Name</p>
     <p class="center m-0">Pizza Price: @Model.UserOrder.Price</p>
     <p class="center m-0">Pizza Ingredients: @Model.UserOrder.UserPizza.Ingredients</p>
+    <div class="center">
+        <a id="approveButton" class="btn buttonCheckoutDone">Checkout</a>
+    <a id="cancelButton" class="btn buttonCheckoutCancel">Cancel</a>
 </div>
+
+</div>
+
 <div class="center">
-    <img src="@imagePath" class="finalImage m-2">
-    <br />
-    <a id="approveButton" class="btn btn-primary mt-4 w-10">Checkout</a>
-    <br />
-    <a id="cancelButton" class="btn btn-primary mt-4 w-10">Cancel</a>
+    <img src="@imagePath" class="finalImage m-2" title="@Model.UserOrder.UserPizza.Name">
 </div>
 
 
 <script>
-
-
     window.onload = () => {
         document.getElementById("approveButton").addEventListener("click", sendNewOrder)
         document.getElementById("cancelButton").addEventListener("click", sendUserBack)

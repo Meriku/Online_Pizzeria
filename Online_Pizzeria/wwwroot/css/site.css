@@ -292,3 +292,32 @@ ul.nav > li > a {
     background-color: white;
     border-radius: 5rem;
 }
+
+.buttonCheckoutDone {
+    background-color: whitesmoke;
+    width: 100px;
+    margin: 20px 10px 5px 10px;
+}
+
+.buttonCheckoutCancel {
+    background-color: whitesmoke;
+    width: 100px;
+    margin: 20px 10px 5px 10px;
+}
+
+
+.buttonCheckoutDone:hover {
+    background-color: lightgreen;
+}
+
+.buttonCheckoutCancel:hover {
+    background-color: lightcoral;
+}
+
+.boxCheckout {
+    width: 300px;
+    margin: 20px auto 30px auto;
+    padding: 20px 0px 20px 0px;
+    background-color: white;
+    border-radius: 0.9rem;
+}

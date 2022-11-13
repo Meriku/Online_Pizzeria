@@ -34,10 +34,5 @@ namespace Online_Pizzeria.Pages.Forms
                 pizzasUser.Add(_mapper.Map(pizza));
             }
         }
-
-
-
-
-
     }
 }
