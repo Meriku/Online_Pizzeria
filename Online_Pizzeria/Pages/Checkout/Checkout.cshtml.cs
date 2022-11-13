@@ -32,14 +32,14 @@ namespace Online_Pizzeria.Pages.Checkout
 
                 return Page();
             }
-            else if (!string.IsNullOrWhiteSpace(pizzaName) && !string.IsNullOrWhiteSpace(pizzaIngredients))
+            else if (!string.IsNullOrWhiteSpace(pizzaName) && !string.IsNullOrWhiteSpace(pizzaIngredients) && pizzaIngredients.Length > 3)
             {
                 var ingredientsList = ParseIngredients(pizzaIngredients);
                 var price = _configuration.GetDefaultPrice() + _configuration.GetDefaultIngredientPrice() * ingredientsList.Count;
 
                 UserPizza = new PizzaUserModel()
                 {
-                    Name = pizzaName,
+                    Name = pizzaName.Equals("Custom Pizza") ? pizzaName : "CustomPizza_" + pizzaName,
                     ImageName = "Create",
                     Ingredients = ingredientsList.ToIngredientsString(),
                     BasePrice = price
@@ -50,55 +50,88 @@ namespace Online_Pizzeria.Pages.Checkout
             else
             {
                 Response.StatusCode = 404;
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Pizza");
             }
 
         }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
             switch (this.Request.Headers["RequestName"][0])
             {
                 case "SendNewOrderRequest":
-                    SendNewOrderRequest();
-                    break;
+                    return SendNewOrderRequest();
 
                 default:
                     Response.StatusCode = 404;
-                    RedirectToPage("/Index");
-                    break;
+                    return RedirectToPage("/Index");
             }
 
         }
 
         private IActionResult SendNewOrderRequest()
         {
-            
+            var pizzaName = this.Request.Headers["PizzaName"][0];
+            var pizzaIngredients = this.Request.Headers["Ingredients"][0];
 
-            ////TODO
+            var ingredientsList = ParseIngredients(pizzaIngredients);
+            var priceCustom = _configuration.GetDefaultPrice() + _configuration.GetDefaultIngredientPrice() * ingredientsList.Count;
 
 
-            Response.StatusCode = 200;
-            return Page();
+            if (string.IsNullOrWhiteSpace(pizzaName)) 
+            {
+                Response.StatusCode = 404;
+                return RedirectToPage("/Index");
+            };
+
+            var pizza = _context.Pizzas.FirstOrDefault(p => p.Name.Equals(pizzaName));
+            if (pizza != null)
+            {
+                var order = new OrderDBModel()
+                {
+                    PizzaId = pizza.Id,
+                    Price = pizza.BasePrice,
+                    StatusCode = Models.StatusCodes.Ordered,
+                    Ordered = DateTime.Now
+                };
+
+                _context.PizzaOrders.Add(order);
+                _context.SaveChanges();
+
+                Response.StatusCode = 200;
+                return RedirectToPage("/Checkout/ThankYou");
+            }
+            else if (!string.IsNullOrWhiteSpace(pizzaName) && !string.IsNullOrWhiteSpace(pizzaIngredients))
+            {
+                var order = new OrderDBModel()
+                {
+                    Price = priceCustom,
+                    StatusCode = Models.StatusCodes.Ordered,
+                    Ordered = DateTime.Now
+                };
+                _context.PizzaOrders.Add(order);
+                _context.SaveChanges();
+
+                Response.StatusCode = 200;
+                return RedirectToPage("/Checkout/ThankYou");
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return RedirectToPage("/Index");
+            }
+
+            Response.StatusCode = 404;
+            return RedirectToPage("/Index");
         }
 
         private List<Ingredient> ParseIngredients(string ingredients)
         {
             var list = new List<Ingredient>();
-            var ingredientsArray = Array.Empty<string>();
-
-            try
-            {
-                ingredientsArray = JsonSerializer.Deserialize<string[]>(ingredients);
-            }
-            catch
-            {
-                return list;
-            }
 
             foreach (var IngredientName in Helper.GetPossibleIngredients())
             {
-                if (ingredientsArray.Contains(IngredientName))
+                if (ingredients.Contains(IngredientName))
                 {
                     list.Add(Enum.Parse<Ingredient>(IngredientName));
                 }

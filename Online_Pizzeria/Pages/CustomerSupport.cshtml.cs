@@ -19,7 +19,7 @@ namespace Online_Pizzeria.Pages
         {
             PhoneNumber = _configuration.GetValue<string>("Company:PhoneNumber") ?? "Change in AppSettings";
             Address = _configuration.GetValue<string>("Company:Address") ?? "Change in AppSettings";
-            Email = _configuration.GetValue<string>("Company:Email") ?? "deafult@company.com";
+            Email = _configuration.GetValue<string>("Company:Email") ?? "default@company.com";
         }
     }
 }

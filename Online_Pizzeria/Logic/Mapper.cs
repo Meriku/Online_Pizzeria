@@ -59,7 +59,7 @@ namespace Online_Pizzeria.Logic
                             Price = OrderDBtoAdmin.Price,
                             StatusCode = OrderDBtoAdmin.StatusCode.ToString(),
                             Ordered = OrderDBtoAdmin.Ordered.ToString("G"),
-                            Delivered = OrderDBtoAdmin.Ordered.ToString("G")
+                            Delivered = OrderDBtoAdmin.Delivered == null ? "" : OrderDBtoAdmin.Delivered.ToString(),
 
                         };
                         return result as TT;

@@ -10,7 +10,6 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
     public class _OrdersTableModel : PageModel
     {
         private readonly ApplicationDB _context;
-        private readonly Mapper<OrderDBModel, OrderAdminModel> _mapper = new();
 
         public string[] Statuses => Helper.GetPossibleStatuses();
         public List<OrderAdminModel> Orders { get; set; } = new List<OrderAdminModel>();
@@ -42,7 +41,7 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
 
             foreach (var orderDB in OrdersDB)
             {
-                var orderAdmin = _mapper.Map(orderDB);
+                var orderAdmin = new Mapper<OrderDBModel, OrderAdminModel>().Map(orderDB);
                 if (orderDB.PizzaId == null)
                 {
                     orderAdmin.PizzaName = "Custom Pizza";
@@ -52,6 +51,7 @@ namespace Online_Pizzeria.Pages.Admin.PartialViews
                     var pizza = _context.Pizzas.FirstOrDefault(x => x.Id == orderDB.PizzaId);
                     orderAdmin.PizzaName = pizza == null ? "Deleted Pizza" : pizza.Name;
                 }
+     
                 OrdersAdmin.Add(orderAdmin);
             }
 

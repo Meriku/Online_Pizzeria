@@ -13,10 +13,12 @@ namespace Online_Pizzeria.Pages.Login
         public string Password { get; set; }
 
         private readonly IConfiguration _configuration;
+        private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(IConfiguration configuration)
+        public LoginModel(IConfiguration configuration, ILogger<LoginModel> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public IActionResult OnGet()
@@ -33,14 +35,14 @@ namespace Online_Pizzeria.Pages.Login
         {
             if (Sessions.Login(_configuration, Login, Password, out var sessionId))
             {
-                Console.WriteLine($"Logged in successfully::Log {DateTime.Now:G}");
+                _logger.LogTrace($"Logged in successfully::Log {DateTime.Now:G}");
                 Response.Cookies.Append("sessionId", $"{sessionId}");
                 return Redirect($"/Admin/Admin");
             }
             else
             {
-                Console.WriteLine($"Login attempt failed::Log {DateTime.Now:G}");
-                this.Response.StatusCode = 401;
+                _logger.LogError($"Login attempt failed::Log {DateTime.Now:G}");
+                Response.StatusCode = 401;
                 return RedirectToPage("/Index");
             }
         }

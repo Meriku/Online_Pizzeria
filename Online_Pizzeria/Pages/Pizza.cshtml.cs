@@ -12,27 +12,23 @@ namespace Online_Pizzeria.Pages.Forms
         public List<PizzaUserModel> pizzasUser;
 
         private readonly ApplicationDB _context;
-        private readonly Mapper<PizzaDBModel, PizzaUserModel> _mapper = new();
 
         public PizzaModel(ApplicationDB context)
         {
             _context = context;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            var pizzasDB = _context.Pizzas.ToArray();
+            var pizzasDB = _context.Pizzas.ToArray() ?? throw new ArgumentNullException();
+
             pizzasUser = new List<PizzaUserModel>();
-
-            if (pizzasDB == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             foreach (var pizza in pizzasDB)
             {
-                pizzasUser.Add(_mapper.Map(pizza));
+                pizzasUser.Add(new Mapper<PizzaDBModel, PizzaUserModel>().Map(pizza));
             }
+
+            return Page();
         }
     }
 }

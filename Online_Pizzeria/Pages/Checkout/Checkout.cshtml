@@ -41,7 +41,10 @@
                 RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
             },
             success: function() {
-                $(window).attr('location', `Checkout\ThankYou`)
+                $(window).attr('location', `ThankYou`)
+            },
+            error: function() {
+                $(window).attr('location', `/Pizza`)
             }
         })
     }
