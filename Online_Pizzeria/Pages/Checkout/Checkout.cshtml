@@ -2,24 +2,25 @@
 @model Online_Pizzeria.Pages.Checkout.CheckoutModel
 
 @{
-    var imagePath = "/images/AllPizzas/" + @Model.UserOrder.UserPizza.ImageName + ".png";
+    var imagePath = "/images/AllPizzas/" + @Model.UserPizza.ImageName + ".png";
 }
 
 <div class="boxCheckout">
     <h5 class="center">Please, check your Order</h5>
     <br />
-    <p class="center m-0">Pizza Name: @Model.UserOrder.UserPizza.Name</p>
-    <p class="center m-0">Pizza Price: @Model.UserOrder.Price</p>
-    <p class="center m-0">Pizza Ingredients: @Model.UserOrder.UserPizza.Ingredients</p>
+    <p class="center m-0">Pizza Name: @Model.UserPizza.Name</p>
+    <p class="center m-0">Pizza Price: @Model.UserPizza.BasePrice</p>
+    <p class="center m-0">Pizza Ingredients: @Model.UserPizza.Ingredients</p>
     <div class="center">
         <a id="approveButton" class="btn buttonCheckoutDone">Checkout</a>
-    <a id="cancelButton" class="btn buttonCheckoutCancel">Cancel</a>
-</div>
-
+        <a id="cancelButton" class="btn buttonCheckoutCancel">Cancel</a>
+        <form method="post"></form>
+    </div>
 </div>
 
 <div class="center">
-    <img src="@imagePath" class="finalImage m-2" title="@Model.UserOrder.UserPizza.Name">
+    <img src="@imagePath" class="finalImage m-2" title="@Model.UserPizza.Name">
+
 </div>
 
 
@@ -32,9 +33,11 @@
     function sendNewOrder() {
         $.ajax({
             type: 'POST',
-            url: "Checkout/Checkout",
+            url: "Checkout",
             headers: {
                 RequestName: "SendNewOrderRequest",
+                PizzaName: @Json.Serialize(Model.UserPizza.Name),
+                Ingredients: @Json.Serialize(Model.UserPizza.Ingredients),
                 RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
             },
             success: function() {
@@ -43,9 +46,9 @@
         })
     }
 
-
     function sendUserBack() {
         $(window).attr('location', `/Pizza`)
     }
+
 </script>
 

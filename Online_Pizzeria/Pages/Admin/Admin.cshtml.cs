@@ -72,7 +72,7 @@ namespace Online_Pizzeria.Pages.Admin
             var pizza = new PizzaDBModel()
             {
                 Name = createPizzaRequest.Name ?? "Default Name",
-                BasePrice = Helper.ParseDecimal(createPizzaRequest.BasePrice, out decimal pri) ? pri : GetDefaultPrice(),
+                BasePrice = Helper.ParseDecimal(createPizzaRequest.BasePrice, out decimal pri) ? pri : _configuration.GetDefaultPrice(),
                 Ingredients = createPizzaRequest.Ingredients
             };
 
@@ -140,7 +140,6 @@ namespace Online_Pizzeria.Pages.Admin
 
             if (Helper.ParseInt(deletePizzaRequest.PizzaId, out int id))
             {
-
                 var pizzaToRemove = _context.Pizzas.FirstOrDefault(p => p.Id == id);
 
                 if (pizzaToRemove == null)
@@ -150,28 +149,6 @@ namespace Online_Pizzeria.Pages.Admin
 
                 _context.Pizzas.Remove(pizzaToRemove);
                 _context.SaveChanges();
-
-                var imgsrc = $"wwwroot/images/AllPizzas/{pizzaToRemove.Name}.png";
-                if (System.IO.File.Exists(imgsrc))
-                {
-                    System.IO.File.Delete(imgsrc);
-                    Console.WriteLine($"Default image was deleated for {pizzaToRemove.Name}::LOG {DateTime.Now:G}");
-                }
-            }
-        }
-
-        private decimal GetDefaultPrice()
-        {
-            var price = _configuration.GetValue<string>("DefaultPrice");
-            try
-            {
-                var priceDecimal = Decimal.Parse(price);
-                return priceDecimal;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
             }
         }
     }

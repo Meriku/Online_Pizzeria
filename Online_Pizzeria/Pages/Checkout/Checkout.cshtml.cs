@@ -8,70 +8,103 @@ using System.Text.Json;
 namespace Online_Pizzeria.Pages.Checkout
 {
     public class CheckoutModel : PageModel
-    {     
+    {
         private readonly ApplicationDB _context;
-        private readonly Mapper<PizzaDBModel, PizzaUserModel> _mapper = new();
-        public OrderUserModel UserOrder { get; set; }
+        private readonly IConfiguration _configuration;
 
-        public CheckoutModel(ApplicationDB context)
+        public PizzaUserModel UserPizza;
+
+        public CheckoutModel(ApplicationDB context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration; 
         }
 
-        public void OnGet([FromQuery] string pizzaName, [FromQuery] string pizzaIngredients)
+        public IActionResult OnGet([FromQuery] string pizzaName, [FromQuery] string pizzaIngredients)
         {
-            if (pizzaName.Count() > 0) //TODO
+            if (!string.IsNullOrWhiteSpace(pizzaName) && string.IsNullOrWhiteSpace(pizzaIngredients))
             {
-                var pizza = _context.Pizzas.FirstOrDefault(x => x.Name.Equals(pizzaName));
-                
-                if (pizza == null)
-                {
-                    throw new ArgumentNullException("Pizza null on Checkout");
-                }
+                var pizzaDB = _context.Pizzas.FirstOrDefault(x => x.Name.Equals(pizzaName));
 
-                UserOrder = new OrderUserModel()
-                {
-                    UserPizza = _mapper.Map(pizza),
-                    Price = pizza.BasePrice,
-                    Ordered = DateTime.Now
-                };
+                if (pizzaDB == null) { return RedirectToPage("/Pizza"); }
+
+                UserPizza = new Mapper<PizzaDBModel, PizzaUserModel>().Map(pizzaDB);
+
+                return Page();
             }
-            
-        }
-
-        public IActionResult OnPost()
-        {
-            if (Sessions.CheckSessionId(this.Request.Cookies["sessionId"]))
+            else if (!string.IsNullOrWhiteSpace(pizzaName) && !string.IsNullOrWhiteSpace(pizzaIngredients))
             {
-                switch (this.Request.Headers["RequestName"][0])
+                var ingredientsList = ParseIngredients(pizzaIngredients);
+                var price = _configuration.GetDefaultPrice() + _configuration.GetDefaultIngredientPrice() * ingredientsList.Count;
+
+                UserPizza = new PizzaUserModel()
                 {
-                    case "SendNewOrderRequest":
-                        return SendNewOrderRequest();
-                }
-                Response.StatusCode = 404;
-                return RedirectToPage("/Index");
+                    Name = pizzaName,
+                    ImageName = "Create",
+                    Ingredients = ingredientsList.ToIngredientsString(),
+                    BasePrice = price
+                };
+
+                return Page();
             }
             else
             {
-                Response.StatusCode = 401;
+                Response.StatusCode = 404;
                 return RedirectToPage("/Index");
             }
+
+        }
+
+        public void OnPost()
+        {
+            switch (this.Request.Headers["RequestName"][0])
+            {
+                case "SendNewOrderRequest":
+                    SendNewOrderRequest();
+                    break;
+
+                default:
+                    Response.StatusCode = 404;
+                    RedirectToPage("/Index");
+                    break;
+            }
+
         }
 
         private IActionResult SendNewOrderRequest()
         {
-            var UserOrderDB = new Mapper<OrderUserModel, OrderDBModel>().Map(UserOrder);
+            
 
-            UserOrderDB.StatusCode = Models.StatusCodes.Ordered;
-            UserOrderDB.PizzaId = _context.Pizzas.FirstOrDefault(x => x.Name.Equals(UserOrder.UserPizza.Name)).Id;
+            ////TODO
 
-            //TODO
-
-            _context.PizzaOrders.Add(UserOrderDB);
-            _context.SaveChanges();
 
             Response.StatusCode = 200;
             return Page();
+        }
+
+        private List<Ingredient> ParseIngredients(string ingredients)
+        {
+            var list = new List<Ingredient>();
+            var ingredientsArray = Array.Empty<string>();
+
+            try
+            {
+                ingredientsArray = JsonSerializer.Deserialize<string[]>(ingredients);
+            }
+            catch
+            {
+                return list;
+            }
+
+            foreach (var IngredientName in Helper.GetPossibleIngredients())
+            {
+                if (ingredientsArray.Contains(IngredientName))
+                {
+                    list.Add(Enum.Parse<Ingredient>(IngredientName));
+                }
+            }
+
+            return list;
         }
 
     }

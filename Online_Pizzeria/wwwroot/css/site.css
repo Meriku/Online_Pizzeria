@@ -30,6 +30,10 @@ body {
     width:20%;
 }
 
+.finalImage:hover {
+    transform: scale(1.1);
+}
+
 .smallImage {
     width: 30%;
     height: 30%;
@@ -320,4 +324,23 @@ ul.nav > li > a {
     padding: 20px 0px 20px 0px;
     background-color: white;
     border-radius: 0.9rem;
+}
+
+.customPizzaMainText {
+    text-align: center;
+    margin: 0px auto 0px auto;
+    padding: 20px 0px 0px 0px;
+}
+.customPizzaInput {
+    display: block;
+    text-align: center;
+    margin: 20px auto 0px auto;
+    color: black;
+    border-radius: 0.3rem;
+    border-color: darkgray;
+}
+.customPizzaButton {
+    display: block;
+    margin: 0px auto 0px auto;
+    width: 100px;
 }

@@ -5,58 +5,48 @@
 
 <div>
     <div class="supportBack" style="margin: auto; width: 500px">
-    <h1 class="text-center">Create your own Pizza</h1>
-
-    <form align="center" method="post">
-        <input id="name" placeholder="Enter Pizza Name" style="text-align:center; margin:20px" asp-for="UserOrder.UserPizza.Name"/>
+        <form method="post"> </form>
+        <h1 class="customPizzaMainText">Create your own Pizza</h1>
+        <input id="name" class="customPizzaInput" placeholder="Enter Pizza Name" />
         <br />
         @{
-            var number = 0;
-            foreach (var IngredientName in Enum.GetNames(typeof(Online_Pizzeria.Models.Ingredient)))
+            foreach (var IngredientName in Model.Ingedients)
             {
-                <input id="@number" type="checkbox" style="margin: auto; text-align:center" placeholder="@IngredientName"/> @IngredientName
-                <br />
-                number++;
+                <div class="row" style="margin: 0px 0px 0px 170px">
+                    <div class="col-2"><input type="checkbox" class="ingredientCheckboxCreate" placeholder="@IngredientName" /></div>
+                    <div class="col-5"><p style="text-align:left">@IngredientName</p></div>
+                </div>
             }
-                <input id="ingredientsList" hidden="true" type="text" asp-for="UserOrder.UserPizza.Ingredients" />
-        }  
-        <br />
-        <button id="button" class="btn btn-primary mt-1 centerButton" style="margin: auto;" type="submit">Order</button>       
-        <br />
-    </form>
+        }
+        <div style="margin: 10px auto auto auto; padding: 0px 0px 25px 0px ;">
+            <button id="button" class="btn btn-primary customPizzaButton" style="margin: auto;">Order</button>
+        </div>
     </div>
-    <br />
-    <p style="text-align:center; margin:20px" id="allIngredients"></p>
 </div>
 
-<script>   
-    let allIngredientsEl = document.getElementById("allIngredients")
-    let ingredientsListEl = document.getElementById("ingredientsList")
-
+<script>
     window.onload = () => {
-        let id = 0
-        while (document.getElementById(id) !== null) 
-        {
-            document.getElementById(id).addEventListener("click", MergeIngredients)      
-            id++
-        }
+        document.getElementById("button").addEventListener("click", redirectToCheckOut)
     }
 
-    function MergeIngredients() {
+    function ingredientsToString() {
         let ingredients = []
-        let id = 0;
-        while (document.getElementById(id) !== null) 
-        {
-            let element = document.getElementById(id) 
-            if (element.checked) 
-            {
-                ingredients.push(element.placeholder)
+        for (let checkbox of document.getElementsByClassName("ingredientCheckboxCreate")) {
+            if (checkbox.checked) {
+                ingredients.push(checkbox.placeholder)
             }
-            id++
         }
-       
-        allIngredientsEl.textContent = ingredients.join(", ")
-        ingredientsListEl.value = ingredients       
-        
+        return JSON.stringify(ingredients)
+    }
+
+    function redirectToCheckOut() {   
+        let pizzaName = document.getElementById("name").value
+        let ingredients = ingredientsToString()
+
+        if (pizzaName === "") {
+            pizzaName = "Custom Pizza"
+        }
+
+        $(window).attr('location', `/Checkout/Checkout?pizzaName=${pizzaName}&pizzaIngredients=${ingredients}`)
     }
 </script>

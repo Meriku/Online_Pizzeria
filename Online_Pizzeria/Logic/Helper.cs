@@ -74,5 +74,41 @@ namespace Online_Pizzeria.Logic
             return "Data Source=" + hostname + ";Initial Catalog=" + dbname + ";User ID=" + username + ";Password=" + password + ";";
         }
 
+        public static decimal GetDefaultPrice(this IConfiguration _configuration)
+        {
+            var price = _configuration.GetValue<string>("DefaultBasePrice");
+            try
+            {
+                var priceDecimal = Decimal.Parse(price);
+                return priceDecimal;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public static decimal GetDefaultIngredientPrice(this IConfiguration _configuration)
+        {
+            var price = _configuration.GetValue<string>("DefaultIngredientsPrice");
+            try
+            {
+                var priceDecimal = Decimal.Parse(price);
+                return priceDecimal;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public static string ToIngredientsString(this List<Ingredient> list)
+        {
+            return String.Join(", ", list); ;
+        }
+
+
     }
 }
